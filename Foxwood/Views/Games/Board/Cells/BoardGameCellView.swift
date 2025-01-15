@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BoardGameCellView: View {
+    @State private var scale: CGFloat = 1.0
+    
     let cell: Cell
     let onReveal: () -> Void
     let onResourceTap: ((CellType) -> Void)?
@@ -36,18 +38,26 @@ struct BoardGameCellView: View {
                         Image(.woodCube)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .opacity(cell.isCompleted ? 0.5 : 1.0)
+                            .scaleEffect(scale)
                     case .water:
                         Image(.waterCube)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .opacity(cell.isCompleted ? 0.5 : 1.0)
+                            .scaleEffect(scale)
                     case .mushroom:
                         Image(.mushroomCube)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .opacity(cell.isCompleted ? 0.5 : 1.0)
+                            .scaleEffect(scale)
                     case .berries:
                         Image(.berriesCube)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .opacity(cell.isCompleted ? 0.5 : 1.0)
+                            .scaleEffect(scale)
                     }
                 } else {
                     Image(.greenCube)
@@ -62,6 +72,25 @@ struct BoardGameCellView: View {
             (!cell.isRevealed && isBlocked)
         )
         .playSound()
+        .onChange(of: cell.isRevealed) { newValue in
+            // Начинаем анимацию только если клетка открыта, это ресурс и не завершена
+            if newValue && cell.type.isResource && !cell.isCompleted {
+                withAnimation(
+                    .easeInOut(duration: 0.8)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    scale = 0.9
+                }
+            }
+        }
+        // Сбрасываем анимацию, когда клетка отыграна
+        .onChange(of: cell.isCompleted) { completed in
+            if completed {
+                withAnimation {
+                    scale = 1.0
+                }
+            }
+        }
     }
 }
 
