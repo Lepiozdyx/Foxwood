@@ -44,6 +44,10 @@ final class NavigationManager: ObservableObject {
     
     func navigate(to screen: Screen) {
         withAnimation {
+            // Если переходим к игре из меню, убеждаемся что все состояния сброшены
+            if screen == .boardGame && currentScreen == .menu {
+                gameManager.resetGame()
+            }
             navigationStack.append(currentScreen)
             currentScreen = screen
         }

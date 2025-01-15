@@ -32,10 +32,15 @@ final class BoardGameViewModel: ObservableObject {
     func setupNewGame() {
         createBoard()
         gameManager.startNewGame()
+        // Убеждаемся, что меню паузы скрыто при начале новой игры
+        showingPauseMenu = false
     }
     
     func resetGame() {
         gameManager.resetGame()
+        // Сбрасываем все состояния
+        showingPauseMenu = false
+        pendingResourceCell = nil
         setupNewGame()
     }
     
@@ -93,6 +98,12 @@ final class BoardGameViewModel: ObservableObject {
     func handleResourceGameCompletion(success: Bool) {
         guard let resource = pendingResourceCell else { return }
         
+        // Mark the cell as completed regardless of the game outcome
+        var updatedCells = cells
+        updatedCells[resource.position.row][resource.position.column].isCompleted = true
+        cells = updatedCells
+        
+        // Add resource only if the game was won
         if success {
             switch resource.type {
             case .wood:
@@ -106,7 +117,7 @@ final class BoardGameViewModel: ObservableObject {
             }
         }
         
-        // Очищаем ожидающий ресурс
+        // Clear the pending resource
         pendingResourceCell = nil
     }
     

@@ -31,6 +31,7 @@ struct Cell: Identifiable {
     let position: Position
     var type: CellType
     var isRevealed: Bool = false
+    var isCompleted: Bool = false
     
     struct Position: Equatable {
         let row: Int

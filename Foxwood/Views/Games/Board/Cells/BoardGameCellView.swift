@@ -17,7 +17,7 @@ struct BoardGameCellView: View {
         Button {
             if !cell.isRevealed {
                 onReveal()
-            } else if cell.type.isResource {
+            } else if cell.type.isResource && !cell.isCompleted {
                 onResourceTap?(cell.type)
             }
         } label: {
@@ -58,8 +58,8 @@ struct BoardGameCellView: View {
             .frame(minWidth: 50, minHeight: 50)
         }
         .disabled(
-            (cell.isRevealed && !cell.type.isResource) || // Блокируем открытые НЕ ресурсные клетки
-            (!cell.isRevealed && isBlocked) // Блокируем все закрытые клетки, если есть незавершенная мини-игра
+            (cell.isRevealed && (!cell.type.isResource || cell.isCompleted)) ||
+            (!cell.isRevealed && isBlocked)
         )
         .playSound()
     }
