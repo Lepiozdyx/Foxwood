@@ -8,16 +8,15 @@
 import SwiftUI
 
 struct BoardGameView: View {
-    @StateObject private var viewModel: BoardGameViewModel
+    // Принимаем viewModel как параметр вместо создания нового
+    @ObservedObject var viewModel: BoardGameViewModel
     @EnvironmentObject private var navigationManager: NavigationManager
     
     @Environment(\.verticalSizeClass) var verticalSizeClass
     private var isPortrait: Bool { verticalSizeClass == .regular }
     private var isIPhone: Bool { UIDevice.current.userInterfaceIdiom == .phone }
     
-    init(gameManager: GameManager = GameManager()) {
-        _viewModel = StateObject(wrappedValue: BoardGameViewModel(gameManager: gameManager))
-    }
+    // Убираем инициализатор по умолчанию, теперь требуется явно передать viewModel
     
     var body: some View {
         GeometryReader { geo in
@@ -125,7 +124,7 @@ struct BoardGameView: View {
         case .water:
             navigationManager.navigate(to: .waterGame)
         case .mushroom, .berries:
-            navigationManager.navigate(to: .foodGame)
+            navigationManager.navigate(to: .foodGame(viewModel))
         default:
             break
         }
@@ -203,6 +202,6 @@ struct ResourceCounterView: View {
 }
 
 #Preview {
-    BoardGameView()
+    BoardGameView(viewModel: BoardGameViewModel())
         .environmentObject(NavigationManager())
 }

@@ -20,7 +20,7 @@ final class BoardGameViewModel: ObservableObject {
     var isPaused: Bool { gameManager.isPaused }
     var isResourcePending: Bool { pendingResourceCell != nil }
     
-    init(gameManager: GameManager) {
+    init(gameManager: GameManager = GameManager()) {
         self.gameManager = gameManager
         setupNewGame()
         

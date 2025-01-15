@@ -9,6 +9,15 @@ import SwiftUI
 
 struct NavigationRootView: View {
     @StateObject private var navigationManager = NavigationManager()
+    // Создаем единый BoardGameViewModel
+    @StateObject private var boardGameViewModel: BoardGameViewModel
+    
+    init() {
+        // Инициализируем BoardGameViewModel с GameManager из NavigationManager
+        let manager = NavigationManager()
+        _navigationManager = StateObject(wrappedValue: manager)
+        _boardGameViewModel = StateObject(wrappedValue: BoardGameViewModel(gameManager: manager.gameManager))
+    }
     
     var body: some View {
         ZStack {
@@ -17,25 +26,29 @@ struct NavigationRootView: View {
                 MenuView()
                     .environmentObject(navigationManager)
             case .boardGame:
-                BoardGameView()
+                // Используем существующий boardGameViewModel
+                BoardGameView(viewModel: boardGameViewModel)
                     .environmentObject(navigationManager)
             case .waterGame:
-                WaterGameView() // Заглушка, нужно реализовать
+                WaterGameView()
                     .environmentObject(navigationManager)
             case .woodGame:
-                WoodGameView() // Заглушка, нужно реализовать
+                WoodGameView()
                     .environmentObject(navigationManager)
             case .foodGame:
-                FoodGameView() // Заглушка, нужно реализовать
-                    .environmentObject(navigationManager)
+                // Используем существующий boardGameViewModel для обработки результатов
+                FoodGameView { success in
+                    boardGameViewModel.handleResourceGameCompletion(success: success)
+                    navigationManager.navigateBack()
+                }
             case .achievements:
-                AchievementsView() // Заглушка, нужно реализовать
+                AchievementsView()
                     .environmentObject(navigationManager)
             case .tutorial:
                 TutorialView()
                     .environmentObject(navigationManager)
             case .settings:
-                SettingsView() // Заглушка, нужно реализовать
+                SettingsView()
                     .environmentObject(navigationManager)
             }
         }

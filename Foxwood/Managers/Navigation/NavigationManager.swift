@@ -12,15 +12,35 @@ enum Screen: Equatable {
     case boardGame
     case waterGame
     case woodGame
-    case foodGame
+    case foodGame(BoardGameViewModel)
     case achievements
     case tutorial
     case settings
+    
+    static func == (lhs: Screen, rhs: Screen) -> Bool {
+        switch (lhs, rhs) {
+        case (.menu, .menu),
+             (.boardGame, .boardGame),
+             (.waterGame, .waterGame),
+             (.woodGame, .woodGame),
+             (.achievements, .achievements),
+             (.tutorial, .tutorial),
+             (.settings, .settings):
+            return true
+        case (.foodGame(let lvm), .foodGame(let rvm)):
+            return lvm === rvm
+        default:
+            return false
+        }
+    }
 }
 
 final class NavigationManager: ObservableObject {
     @Published var currentScreen: Screen = .menu
     @Published var navigationStack: [Screen] = []
+    
+    // Добавляем GameManager как свойство NavigationManager
+    let gameManager = GameManager()
     
     func navigate(to screen: Screen) {
         withAnimation {
@@ -41,10 +61,8 @@ final class NavigationManager: ObservableObject {
         withAnimation {
             currentScreen = .menu
             navigationStack.removeAll()
+            // Сбрасываем состояние игры только при возврате в меню
+            gameManager.resetGame()
         }
     }
-    
-//    private func playSound() {
-//        SoundManager.shared.playSound()
-//    }
 }
