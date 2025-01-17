@@ -30,7 +30,8 @@ struct NavigationRootView: View {
                 BoardGameView(viewModel: boardGameViewModel)
                     .environmentObject(navigationManager)
             case .waterGame:
-                WaterGameView()
+//                WaterGameView()
+                EmptyView()
                     .environmentObject(navigationManager)
             case .woodGame:
                 WoodGameView()
