@@ -30,14 +30,14 @@ struct NavigationRootView: View {
                 BoardGameView(viewModel: boardGameViewModel)
                     .environmentObject(navigationManager)
             case .waterGame:
-//                WaterGameView()
-                EmptyView()
-                    .environmentObject(navigationManager)
+                WaterGameView { success in
+                    boardGameViewModel.handleResourceGameCompletion(success: success)
+                    navigationManager.navigateBack()
+                }
             case .woodGame:
                 WoodGameView()
                     .environmentObject(navigationManager)
             case .foodGame:
-                // Используем существующий boardGameViewModel для обработки результатов
                 FoodGameView { success in
                     boardGameViewModel.handleResourceGameCompletion(success: success)
                     navigationManager.navigateBack()

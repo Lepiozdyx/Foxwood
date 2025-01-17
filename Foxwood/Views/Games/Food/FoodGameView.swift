@@ -25,14 +25,14 @@ struct FoodGameView: View {
                 
                 switch viewModel.gameState {
                 case .countdown(let count):
-                    FoodGameCountdownView(count: count)
+                    CountdownView(count: count)
                 case .playing:
                     FoodGamePlayView(
                         viewModel: viewModel,
                         geometry: geometry
                     )
                 case .finished(let success):
-                    FoodGameOverView(
+                    GameOverView(
                         success: success,
                         onExit: { viewModel.completeGame() }
                     )
@@ -59,24 +59,6 @@ struct FoodGameView: View {
     }
 }
 
-// MARK: - Countdown View
-struct FoodGameCountdownView: View {
-    let count: Int
-    
-    var body: some View {
-        ZStack {
-            Color.black.opacity(0.7)
-            VStack {
-                Text("Get Ready!")
-                    .fontModifier(30)
-                Text("\(count)")
-                    .fontModifier(40)
-            }
-        }
-        .ignoresSafeArea()
-    }
-}
-
 // MARK: - Game Play View
 struct FoodGamePlayView: View {
     @ObservedObject var viewModel: FoodGameViewModel
@@ -85,9 +67,10 @@ struct FoodGamePlayView: View {
     var body: some View {
         ZStack {
             VStack {
-                GameStatusBarView(
+                GameStatusBar(
                     timeRemaining: viewModel.timeRemaining,
-                    collectedFood: viewModel.collectedFood
+                    score: viewModel.collectedFood,
+                    requiredNumber: 10
                 )
                 Spacer()
             }
@@ -102,41 +85,6 @@ struct FoodGamePlayView: View {
                 PenaltyOverlayView()
             }
         }
-    }
-}
-
-// MARK: - Status Bar View
-struct GameStatusBarView: View {
-    let timeRemaining: TimeInterval
-    let collectedFood: Int
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            Spacer()
-            
-            GameMetricView(
-                value: String(format: "%.0f", timeRemaining)
-            )
-            
-            GameMetricView(
-                value: "\(collectedFood)/\(FoodGameConstants.requiredFoodCount)"
-            )
-        }
-        .padding()
-    }
-}
-
-struct GameMetricView: View {
-    let value: String
-    
-    var body: some View {
-        Image(.hexagon)
-            .resizable()
-            .frame(width: 120, height: 50)
-            .overlay {
-                Text(value)
-                    .fontModifier(26)
-            }
     }
 }
 
@@ -201,57 +149,6 @@ struct PenaltyOverlayView: View {
                     RoundedRectangle(cornerRadius: 20)
                         .foregroundStyle(.ultraThinMaterial)
                 )
-        }
-    }
-}
-
-// MARK: - Game Over View
-struct FoodGameOverView: View {
-    let success: Bool
-    let onExit: () -> Void
-    
-    var body: some View {
-        ZStack {
-            Color.black.opacity(0.7)
-                .ignoresSafeArea()
-            
-            BoardView(width: 400, height: 350)
-                .overlay(alignment: .top) {
-                    ZStack {
-                        Image(.hexagon)
-                            .resizable()
-                            .frame(width: 130, height: 50)
-                        
-                        Text(success ?
-                             "Win" :
-                             "Loose"
-                        )
-                        .fontModifier(18)
-                    }
-                }
-                .overlay {
-                    VStack(spacing: 20) {
-                        Text(success ?
-                             "All right! You did it!" :
-                             "You didn't get enough food"
-                        )
-                        .fontModifier(24)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 30)
-                        
-                        Button {
-                            onExit()
-                        } label: {
-                            ActionView(
-                                text: "Back to board",
-                                fontSize: 24,
-                                width: 250,
-                                height: 70
-                            )
-                        }
-                    }
-                }
-                .padding()
         }
     }
 }

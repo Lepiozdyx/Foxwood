@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct BoardGameView: View {
-    // Принимаем viewModel как параметр вместо создания нового
     @ObservedObject var viewModel: BoardGameViewModel
     @EnvironmentObject private var navigationManager: NavigationManager
     
     @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     private var isPortrait: Bool { verticalSizeClass == .regular }
     private var isIPhone: Bool { UIDevice.current.userInterfaceIdiom == .phone }
-    
-    // Убираем инициализатор по умолчанию, теперь требуется явно передать viewModel
     
     var body: some View {
         GeometryReader { geo in
