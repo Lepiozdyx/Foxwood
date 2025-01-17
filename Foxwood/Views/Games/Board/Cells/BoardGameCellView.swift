@@ -73,7 +73,6 @@ struct BoardGameCellView: View {
         )
         .playSound()
         .onChange(of: cell.isRevealed) { newValue in
-            // Начинаем анимацию только если клетка открыта, это ресурс и не завершена
             if newValue && cell.type.isResource && !cell.isCompleted {
                 withAnimation(
                     .easeInOut(duration: 0.8)
@@ -83,7 +82,6 @@ struct BoardGameCellView: View {
                 }
             }
         }
-        // Сбрасываем анимацию, когда клетка отыграна
         .onChange(of: cell.isCompleted) { completed in
             if completed {
                 withAnimation {

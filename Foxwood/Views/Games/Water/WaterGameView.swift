@@ -9,9 +9,8 @@ import SwiftUI
 
 struct WaterGameView: View {
     @StateObject private var viewModel: WaterGameViewModel
-    @EnvironmentObject private var navigationManager: NavigationManager
     
-    init(onComplete: ((Bool) -> Void)? = nil) {
+    init(onComplete: @escaping (Bool) -> Void) {
         _viewModel = StateObject(wrappedValue: WaterGameViewModel(onGameComplete: onComplete))
     }
     
@@ -35,7 +34,7 @@ struct WaterGameView: View {
                     GameOverView(
                         success: success,
                         onExit: {
-                            navigationManager.navigateBack()
+                            viewModel.completeGame()
                         }
                     )
                 }
@@ -61,7 +60,7 @@ struct WaterGameView: View {
 }
 
 #Preview {
-    WaterGameView()
+    WaterGameView(onComplete: {_ in })
         .environmentObject(NavigationManager())
 }
 
@@ -72,30 +71,27 @@ struct WaterGamePlayView: View {
     
     var body: some View {
         ZStack {
+            // Game Area
+            GameAreaView(
+                width: geometry.size.width,
+                height: geometry.size.height - geometry.safeAreaInsets.top -
+                WaterGameConstants.statusBarHeight - geometry.safeAreaInsets.bottom
+            )
+            
             // Status Bar
             VStack {
                 GameStatusBar(
                     timeRemaining: viewModel.timeRemaining,
                     score: viewModel.score,
-                    requiredNumber: 5
+                    requiredNumber: WaterGameConstants.requiredDrops
                 )
                 
                 Spacer()
             }
             
-            // Game Area
-            GameAreaView(
-                width: geometry.size.width - geometry.safeAreaInsets.leading -
-                       geometry.safeAreaInsets.trailing - WaterGameConstants.borderPadding * 2,
-                height: geometry.size.height - geometry.safeAreaInsets.top -
-                        geometry.safeAreaInsets.bottom - WaterGameConstants.statusBarHeight -
-                        WaterGameConstants.borderPadding * 2
-            )
-            
             // Game Elements
             ZStack {
                 SnakeView(segments: viewModel.segments)
-                
                 WaterDropView(drop: viewModel.waterDrop)
             }
         }
@@ -111,17 +107,24 @@ struct WaterGamePlayView: View {
         )
     }
 }
+
 // MARK: - Snake View
 struct SnakeView: View {
     let segments: [SnakeSegment]
     
     var body: some View {
-        ForEach(segments) { segment in
+        ForEach(Array(segments.enumerated()), id: \.element.id) { index, segment in
             Circle()
-                .foregroundStyle(.yellow)
-                .shadow(color: .red, radius: 1)
-                .overlay(Circle().stroke(.black, lineWidth: 1))
-                .frame(width: WaterGameConstants.snakeSize, height: WaterGameConstants.snakeSize)
+                .foregroundStyle(index == 0 ? .orange : .blue.opacity(0.6))
+                .shadow(color: .black, radius: 1)
+                .overlay(
+                    Circle()
+                        .stroke(.black.opacity(0.5), lineWidth: 1)
+                )
+                .frame(
+                    width: WaterGameConstants.snakeSize,
+                    height: WaterGameConstants.snakeSize
+                )
                 .position(segment.position)
         }
     }
@@ -129,14 +132,38 @@ struct SnakeView: View {
 
 // MARK: - Water Drop View
 struct WaterDropView: View {
+    @State private var scale: CGFloat = 1.0
+    @State private var rotation: CGFloat = 0
+    
     let drop: WaterDrop
     
     var body: some View {
         Image(.waterdrop)
             .resizable()
-            .shadow(color: .black, radius: 1, x: 0.5, y: 0.5)
+            .shadow(color: .white.opacity(0.6), radius: 2, x: 0, y: 1)
             .frame(width: WaterGameConstants.dropSize, height: WaterGameConstants.dropSize * 1.3)
             .position(drop.position)
+            .scaleEffect(scale)
+            .rotationEffect(.degrees(rotation))
+            .onAppear {
+                withAnimation(
+                    .easeInOut(duration: 0.8)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    scale = 0.9
+                }
+
+                withAnimation(
+                    .easeInOut(duration: 1.2)
+                    .repeatForever(autoreverses: true)
+                ) {
+                    rotation = 2
+                }
+            }
+            .onDisappear {
+                scale = 0
+                rotation = 0
+            }
     }
 }
 
@@ -149,8 +176,18 @@ struct GameAreaView: View {
         Color.clear
             .frame(width: width, height: height)
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.red.opacity(0.5), lineWidth: 3)
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                Color.red.opacity(0.7),
+                                Color.blue.opacity(0.7)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 4
+                    )
             )
     }
 }

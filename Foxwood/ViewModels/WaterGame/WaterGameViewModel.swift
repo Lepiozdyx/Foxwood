@@ -26,6 +26,7 @@ final class WaterGameViewModel: ObservableObject {
     private var safeAreaInsets: EdgeInsets = .init()
     private var gameArea: CGRect = .zero
     private let onGameComplete: ((Bool) -> Void)?
+    private let segmentSpacing: CGFloat = WaterGameConstants.snakeSize
     
     // MARK: - Initialization
     init(onGameComplete: ((Bool) -> Void)? = nil) {
@@ -37,16 +38,15 @@ final class WaterGameViewModel: ObservableObject {
         screenBounds = bounds
         safeAreaInsets = safeArea
         
-        // Calculate game area
-        let gameAreaWidth = bounds.width - safeArea.leading - safeArea.trailing - WaterGameConstants.borderPadding * 2
-        let statusBarTotalHeight = WaterGameConstants.statusBarHeight + safeArea.top + WaterGameConstants.borderPadding
-        let gameAreaHeight = bounds.height - statusBarTotalHeight - safeArea.bottom - WaterGameConstants.borderPadding
+        // Рассчитываем игровую область используя всю доступную ширину
+        // и высоту до границ безопасной зоны
+        let statusBarTotalHeight = WaterGameConstants.statusBarHeight + safeArea.top
         
         gameArea = CGRect(
-            x: safeArea.leading + WaterGameConstants.borderPadding,
-            y: statusBarTotalHeight,
-            width: gameAreaWidth,
-            height: gameAreaHeight
+            x: 0, // Начинаем от левого края
+            y: statusBarTotalHeight, // Учитываем высоту статус бара
+            width: bounds.width, // Используем всю ширину
+            height: bounds.height - statusBarTotalHeight - safeArea.bottom // Учитываем нижнюю safe area
         )
         
         if case .initial = gameState {
@@ -76,6 +76,11 @@ final class WaterGameViewModel: ObservableObject {
     func startGame() {
         resetGame()
         startCountdown()
+    }
+    
+    func completeGame() {
+        guard case .finished(let success) = gameState else { return }
+        onGameComplete?(success)
     }
     
     func cleanup() {
@@ -141,13 +146,16 @@ final class WaterGameViewModel: ObservableObject {
         var newSegments = segments
         let movement = direction.movement
         
-        // Calculate new head position
+        // Сохраняем предыдущие позиции для правильного следования
+        let previousPositions = segments.map { $0.position }
+        
+        // Рассчитываем новую позицию головы
         let newHeadPosition = CGPoint(
             x: segments[0].position.x + movement.x,
             y: segments[0].position.y + movement.y
         )
         
-        // Check if new position is within bounds
+        // Проверяем, находится ли новая позиция в пределах игровой области
         guard gameArea.contains(CGPoint(
             x: newHeadPosition.x,
             y: newHeadPosition.y
@@ -156,11 +164,28 @@ final class WaterGameViewModel: ObservableObject {
             return
         }
         
+        // Обновляем позицию головы
         newSegments[0].position = newHeadPosition
         
-        // Move body
+        // Обновляем позиции тела змейки
         for i in 1..<segments.count {
-            newSegments[i].position = segments[i-1].position
+            let previousSegment = previousPositions[i - 1]
+            let currentSegment = previousPositions[i]
+            
+            // Вычисляем вектор направления к предыдущему сегменту
+            let dx = previousSegment.x - currentSegment.x
+            let dy = previousSegment.y - currentSegment.y
+            let distance = sqrt(dx * dx + dy * dy)
+            
+            if distance > segmentSpacing {
+                // Нормализуем вектор и устанавливаем новую позицию
+                let normalizedDx = dx / distance
+                let normalizedDy = dy / distance
+                let newX = previousSegment.x - normalizedDx * segmentSpacing
+                let newY = previousSegment.y - normalizedDy * segmentSpacing
+                
+                newSegments[i].position = CGPoint(x: newX, y: newY)
+            }
         }
         
         segments = newSegments
@@ -188,7 +213,9 @@ final class WaterGameViewModel: ObservableObject {
     }
     
     private func generateNewDrop() {
-        let padding = WaterGameConstants.dropSize / 2
+        let padding = WaterGameConstants.dropSize
+        
+        // Обновленные границы для генерации капель
         let randomX = CGFloat.random(
             in: (gameArea.minX + padding)...(gameArea.maxX - padding)
         )
@@ -201,10 +228,36 @@ final class WaterGameViewModel: ObservableObject {
     
     private func addSegment() {
         guard let lastSegment = segments.last else { return }
-        segments.append(SnakeSegment(position: lastSegment.position))
+        
+        // Вычисляем позицию нового сегмента
+        let direction: CGPoint
+        if segments.count > 1 {
+            let previousSegment = segments[segments.count - 2].position
+            let dx = lastSegment.position.x - previousSegment.x
+            let dy = lastSegment.position.y - previousSegment.y
+            let distance = sqrt(dx * dx + dy * dy)
+            direction = CGPoint(
+                x: dx / distance * segmentSpacing,
+                y: dy / distance * segmentSpacing
+            )
+        } else {
+            // Если это первый дополнительный сегмент, добавляем его позади головы
+            direction = CGPoint(
+                x: -self.direction.movement.x * segmentSpacing,
+                y: -self.direction.movement.y * segmentSpacing
+            )
+        }
+        
+        let newPosition = CGPoint(
+            x: lastSegment.position.x + direction.x,
+            y: lastSegment.position.y + direction.y
+        )
+        
+        segments.append(SnakeSegment(position: newPosition))
     }
     
     private func resetPositions() {
+        // Размещаем змейку в центре игровой области
         let centerX = gameArea.midX
         let centerY = gameArea.midY
         
@@ -225,6 +278,5 @@ final class WaterGameViewModel: ObservableObject {
         let success = score >= WaterGameConstants.requiredDrops
         HapticManager.shared.play(success ? .success : .error)
         gameState = .finished(success: success)
-        onGameComplete?(success)
     }
 }

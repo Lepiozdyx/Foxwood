@@ -10,17 +10,17 @@ import SwiftUI
 
 enum WaterGameConstants {
     // Game Settings
-    static let gameDuration: TimeInterval = 15
-    static let requiredDrops: Int = 5
+    static let gameDuration: TimeInterval = 30
+    static let requiredDrops: Int = 10
     static let countdownDuration: Int = 3
     
     // Object Sizes
-    static let snakeSize: CGFloat = 30
-    static let dropSize: CGFloat = 30
+    static let snakeSize: CGFloat = 27
+    static let dropSize: CGFloat = 27
     
     // Movement and Layout
-    static let moveSpeed: CGFloat = 5  // Уменьшили скорость движения
-    static let updateInterval: TimeInterval = 1/60  // Увеличили частоту обновления для плавности
+    static let moveSpeed: CGFloat = 3.5  // 5 скорость движения
+    static let updateInterval: TimeInterval = 1/60  // частота обновления для плавности
     static let borderPadding: CGFloat = 30
     static let statusBarSpacing: CGFloat = 10
     static let statusBarHeight: CGFloat = 50
