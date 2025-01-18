@@ -47,7 +47,6 @@ final class SoundManager {
     }
     
     func playSound() {
-        guard SettingsManager.shared.isSoundOn else { return }
         guard let url = Bundle.main.url(forResource: "click", withExtension: "mp3") else { return }
         
         do {

@@ -17,6 +17,7 @@ final class WoodGameViewModel: ObservableObject {
     @Published private(set) var score = GameScore()
     @Published private(set) var lastHitSuccess: Bool?
     @Published private(set) var indicatorColor: Color = .green
+    @Published private(set) var shakeWood: Bool = false
     
     // MARK: - Private Properties
     private var gameTimer: AnyCancellable?
@@ -39,16 +40,18 @@ final class WoodGameViewModel: ObservableObject {
         
         if isSuccess {
             HapticManager.shared.play(.success)
+            shakeWood = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                self.shakeWood = false
+            }
         } else {
             HapticManager.shared.play(.error)
-            // Анимируем цвет индикатора
-            withAnimation(.easeOut(duration: 0.15)) {
+            withAnimation(.easeOut(duration: 0.1)) {
                 indicatorColor = .red
             }
-            // Возвращаем исходный цвет
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation(.easeOut(duration: 0.2)) {
-                    self.indicatorColor = .green
+                    self.indicatorColor = .white
                 }
             }
         }

@@ -66,7 +66,8 @@ struct WoodGamePlayView: View {
                 GameStatusBar(
                     timeRemaining: 0,
                     score: viewModel.successCount,
-                    requiredNumber: viewModel.requiredSuccessCount
+                    requiredNumber: viewModel.requiredSuccessCount,
+                    isTimer: false
                 )
                 
                 Spacer()
@@ -97,6 +98,28 @@ struct WoodGamePlayView: View {
                 height: WoodGameConstants.woodImageSize.height
             )
             .shadow(color: .black, radius: 5, x: -3, y: 3)
+            .scaleEffect(viewModel.shakeWood ? 0.95 : 1.0)
+            .modifier(ShakeEffect(shaking: viewModel.shakeWood))
+            .animation(.interpolatingSpring(stiffness: 500, damping: 5),
+                      value: viewModel.shakeWood)
+    }
+
+    struct ShakeEffect: GeometryEffect {
+        var amount: CGFloat = 5
+        var shakesPerUnit = 2
+        var shaking: Bool
+        
+        var animatableData: CGFloat {
+            get { CGFloat(shaking ? 1 : 0) }
+            set { }
+        }
+
+        func effectValue(size: CGSize) -> ProjectionTransform {
+            guard shaking else { return ProjectionTransform(.identity) }
+            
+            let translation = amount * sin(animatableData * .pi * CGFloat(shakesPerUnit))
+            return ProjectionTransform(CGAffineTransform(translationX: translation, y: 0))
+        }
     }
     
     private var scaleView: some View {

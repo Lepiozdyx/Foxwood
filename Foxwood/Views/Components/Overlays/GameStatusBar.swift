@@ -11,14 +11,17 @@ struct GameStatusBar: View {
     let timeRemaining: TimeInterval
     let score: Int
     let requiredNumber: Int
+    var isTimer = true
     
     var body: some View {
         HStack(spacing: 4) {
             Spacer()
             
-            GameMetricView(
-                value: String(format: "%.0f", timeRemaining)
-            )
+            if isTimer {
+                GameMetricView(
+                    value: String(format: "%.0f", timeRemaining)
+                )
+            }
             
             GameMetricView(
                 value: "\(score)/\(requiredNumber)"

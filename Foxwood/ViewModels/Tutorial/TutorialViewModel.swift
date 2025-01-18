@@ -8,9 +8,6 @@
 import SwiftUI
 
 final class TutorialViewModel: ObservableObject {
-//    @AppStorage добавь для сохранения состояния при первом запуске
-    @Published var tutorialState: TutorialState = .welcome
-
     enum TutorialState: CaseIterable {
         case welcome
         case field
@@ -18,6 +15,10 @@ final class TutorialViewModel: ObservableObject {
         case resources
         case tutorialEnd
     }
+    
+//    @AppStorage добавь для сохранения состояния при первом запуске
+    @Published var tutorialState: TutorialState = .welcome
+
 
     func moveToNextStep() {
         guard let currentIndex = TutorialState.allCases.firstIndex(of: tutorialState),

@@ -9,11 +9,9 @@ import SwiftUI
 
 struct NavigationRootView: View {
     @StateObject private var navigationManager = NavigationManager()
-    // Создаем единый BoardGameViewModel
     @StateObject private var boardGameViewModel: BoardGameViewModel
     
     init() {
-        // Инициализируем BoardGameViewModel с GameManager из NavigationManager
         let manager = NavigationManager()
         _navigationManager = StateObject(wrappedValue: manager)
         _boardGameViewModel = StateObject(wrappedValue: BoardGameViewModel(gameManager: manager.gameManager))
@@ -26,7 +24,6 @@ struct NavigationRootView: View {
                 MenuView()
                     .environmentObject(navigationManager)
             case .boardGame:
-                // Используем существующий boardGameViewModel
                 BoardGameView(viewModel: boardGameViewModel)
                     .environmentObject(navigationManager)
             case .waterGame:

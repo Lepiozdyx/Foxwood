@@ -10,10 +10,10 @@ import Foundation
 enum WoodGameConstants {
     // Game Settings
     static let targetZoneWidth: CGFloat = 0.2 // 20% of total width
-    static let indicatorSpeed: CGFloat = 0.5 // 1.5 - 2
-    static let requiredSuccessStreak = 3
+    static let indicatorSpeed: CGFloat = 1.5
+    static let requiredSuccessStreak = 5
     static let maxMisses = 3
-    static let countdownDuration: Int = 0 // 3
+    static let countdownDuration: Int = 3
     
     // UI Settings
     static let scaleHeight: CGFloat = 40
@@ -31,8 +31,8 @@ enum WoodGameState: Equatable {
 }
 
 struct IndicatorPosition {
-    var x: CGFloat // Position between 0 and 1
-    var direction: Bool // true = right, false = left
+    var x: CGFloat
+    var direction: Bool
     
     mutating func update() {
         if direction {
