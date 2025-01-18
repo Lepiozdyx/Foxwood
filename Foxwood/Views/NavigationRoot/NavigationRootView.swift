@@ -35,8 +35,10 @@ struct NavigationRootView: View {
                     navigationManager.navigateBack()
                 }
             case .woodGame:
-                WoodGameView()
-                    .environmentObject(navigationManager)
+                WoodGameView { success in
+                    boardGameViewModel.handleResourceGameCompletion(success: success)
+                    navigationManager.navigateBack()
+                }
             case .foodGame:
                 FoodGameView { success in
                     boardGameViewModel.handleResourceGameCompletion(success: success)
