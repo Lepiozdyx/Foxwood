@@ -10,11 +10,11 @@ import SwiftUI
 
 // MARK: - Constants
 enum FoodGameConstants {
-    static let gameDuration: TimeInterval = 30 // 30
+    static let gameDuration: TimeInterval = 30
     static let penaltyDuration: TimeInterval = 5
     static let requiredFoodCount = 10
-    static let itemGenerationPeriod: TimeInterval = 0.7
-    static let itemFallingDuration: TimeInterval = 2.5
+    static let itemGenerationPeriod: TimeInterval = 0.65
+    static let itemFallingDuration: TimeInterval = 2.2
     static let maxFallingItems = 40
     static let itemSize: CGFloat = 60
 }

@@ -19,26 +19,22 @@ final class BoardGameViewModel: ObservableObject {
     var gameState: GameState { gameManager.gameState }
     var isPaused: Bool { gameManager.isPaused }
     var isResourcePending: Bool { pendingResourceCell != nil }
+    var isGameOver: Bool { gameManager.isGameOver }
+    var hasWon: Bool { gameState.hasWon }
     
     init(gameManager: GameManager = GameManager()) {
         self.gameManager = gameManager
         setupNewGame()
-        
-        gameManager.onGameOver = { hasWon in
-            print("Game Over, Won: \(hasWon)")
-        }
     }
     
     func setupNewGame() {
         createBoard()
         gameManager.startNewGame()
-        // Убеждаемся, что меню паузы скрыто при начале новой игры
         showingPauseMenu = false
     }
     
     func resetGame() {
         gameManager.resetGame()
-        // Сбрасываем все состояния
         showingPauseMenu = false
         pendingResourceCell = nil
         setupNewGame()

@@ -86,11 +86,22 @@ struct BoardGameView: View {
                         }
                     )
                 }
+                
+                // MARK: GameOver View
+                if viewModel.isGameOver {
+                    GameOverView(
+                        success: viewModel.hasWon,
+                        onExit: {
+                            viewModel.resetGame()
+                            navigationManager.navigateToMenu()
+                        }
+                    )
+                }
             }
         }
     }
     
-    // MARK: - Subviews
+    // MARK: - orientationMessage
     private var orientationMessage: some View {
         HStack {
             Image(systemName: "exclamationmark.circle.fill")
@@ -108,7 +119,7 @@ struct BoardGameView: View {
         )
     }
     
-    // MARK: - Actions
+    // MARK: - actions
     private func handleCellReveal(row: Int, column: Int) {
         let position = Cell.Position(row: row, column: column)
         _ = viewModel.revealCell(at: position)
@@ -128,7 +139,7 @@ struct BoardGameView: View {
     }
 }
 
-// MARK: - Supporting Views
+// MARK: - GameTopBarView
 struct GameTopBarView: View {
     let woodCount: Int
     let waterCount: Int
@@ -154,6 +165,7 @@ struct GameTopBarView: View {
     }
 }
 
+// MARK: - MovesCounterView
 struct MovesCounterView: View {
     let movesLeft: Int
     
@@ -170,6 +182,7 @@ struct MovesCounterView: View {
     }
 }
 
+// MARK: - ResourceCounterView
 struct ResourceCounterView: View {
     let woodCount: Int
     let waterCount: Int
