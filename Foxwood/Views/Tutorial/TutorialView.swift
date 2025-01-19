@@ -125,7 +125,7 @@ struct TutorialView: View {
                 Text("You have only 10 moves before nightfall. Get your resources together. Good luck!")
                     .fontModifier(14)
                 
-                Image(.board)
+                Image(.greenUnderlay)
                     .resizable()
                     .frame(width: 120, height: 100)
                     .overlay {
@@ -301,6 +301,7 @@ struct TutorialView: View {
         }
     }
     
+    // MARK: - customDivider
     private var customDivider: some View {
         Rectangle()
             .frame(width: .infinity, height: 1)

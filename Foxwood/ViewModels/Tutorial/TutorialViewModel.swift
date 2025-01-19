@@ -16,7 +16,6 @@ final class TutorialViewModel: ObservableObject {
         case tutorialEnd
     }
     
-//    @AppStorage добавь для сохранения состояния при первом запуске
     @Published var tutorialState: TutorialState = .welcome
 
 

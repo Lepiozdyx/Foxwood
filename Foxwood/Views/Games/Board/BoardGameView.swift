@@ -94,8 +94,7 @@ struct BoardGameView: View {
     private var orientationMessage: some View {
         HStack {
             Image(systemName: "exclamationmark.circle.fill")
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(.yellow, .white)
+                .foregroundStyle(.white)
                 .font(.system(size: 25))
             
             Text("Use landscape screen orientation while playing a mini-games")
