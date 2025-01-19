@@ -91,15 +91,20 @@ struct TutorialView: View {
         case .resources:
             resourcesView
         case .tutorialEnd:
-            Text("Good luck!")
-                .fontModifier(22)
+            VStack(spacing: 40) {
+                Text("Good luck and have fun!")
+                    .fontModifier(22)
+                Image(.logo)
+                    .resizable()
+                    .frame(width: 90, height: 100)
+            }
         }
     }
     
     // MARK: - welcomeView
     private var welcomeView: some View {
         VStack(spacing: 30) {
-            Text("Welcome to the 'foxwood' forest!")
+            Text("Welcome to the “foxwood” forest!")
                 .fontModifier(18)
             
             customDivider
@@ -217,12 +222,16 @@ struct TutorialView: View {
                 customDivider
                 
                 VStack {
-                    Text("- The game of getting food. You need to catch resources by using taps. Time limit 30 seconds.")
+                    Text("- The game of getting food. \nYou need to catch resources by using taps. Time limit 30 seconds.")
                         .fontModifier(12)
                     
                     HStack {
                         Image(.mushroomButton)
+                            .resizable()
+                            .frame(width: 50, height: 50)
                         Image(.berriesButton)
+                            .resizable()
+                            .frame(width: 50, height: 50)
                         Image(systemName: "checkmark")
                             .font(.system(size: 30))
                             .foregroundStyle(.green)
@@ -231,40 +240,51 @@ struct TutorialView: View {
                     
                     HStack {
                         Image(.poisonMushroomButton)
+                            .resizable()
+                            .frame(width: 50, height: 50)
                         Image(.bacteriaButton)
+                            .resizable()
+                            .frame(width: 50, height: 50)
                         Image(.bacteria2Button)
+                            .resizable()
+                            .frame(width: 50, height: 50)
                         Image(systemName: "xmark")
                             .font(.system(size: 30))
                             .foregroundStyle(.red)
                             .shadow(color: .black, radius: 2, x: -3, y: 3)
                     }
                 }
+                .frame(maxHeight: 350)
                 
                 customDivider
                 
                 VStack {
-                    Text("- The game of getting water. Control a moving object by swiping on the screen, or keeping your finger on the screen to catch a drop of water. Time limit 30 seconds.")
+                    Text("- The game of getting water. \nControl a moving object by swiping on the screen to catch a drop of water. Time limit 30 seconds.")
                         .fontModifier(12)
                     
                     HStack(spacing: 20) {
                         Image(.waterdrop)
+                            .resizable()
+                            .frame(width: 30, height: 40)
                         
                         Circle()
                             .frame(width: 30, height: 30)
                             .foregroundStyle(.yellow)
                             .shadow(color: .black, radius: 2, x: 1, y: 1)
-                        
-                        Image(systemName: "hand.draw.fill")
-                            .font(.system(size: 35))
-                            .foregroundStyle(.white)
-                            .shadow(color: .black, radius: 2, x: -1, y: 2)
+                            .overlay {
+                                Image(systemName: "hand.draw.fill")
+                                    .font(.system(size: 30))
+                                    .foregroundStyle(.white)
+                                    .shadow(color: .black, radius: 2, x: -1, y: 2)
+                                    .offset(x: 15, y: 15)
+                            }
                     }
                 }
                 
                 customDivider
                 
                 VStack {
-                    Text("- The game of getting wood. Your task is to make a series of three accurate hits in time by pressing the button. Watch the indicator, it must be in the “green” zone. There are three chances to miss! No time limits.")
+                    Text("- The game of getting wood. \nYour task is to make a series of five accurate hits in time by pressing the button. Watch the indicator, it must be in the “green” zone. There are three chances to miss! No time limits.")
                         .fontModifier(12)
                     
                     HStack(spacing: 20) {

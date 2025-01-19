@@ -12,6 +12,7 @@ struct BackgroundView: View {
         Image(.bg)
             .resizable()
             .ignoresSafeArea()
+            .blur(radius: 6)
     }
 }
 
