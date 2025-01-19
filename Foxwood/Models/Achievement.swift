@@ -7,37 +7,52 @@
 
 import Foundation
 
+enum AchievementType: String, CaseIterable, Codable {
+    case food = "food"
+    case water = "water"
+    case wood = "wood"
+    case nights = "nights"
+    
+    var image: ImageResource {
+        switch self {
+        case .food: return .foodAchievement
+        case .water: return .waterAchievement
+        case .wood: return .woodAchievement
+        case .nights: return .nightAchievement
+        }
+    }
+    
+    var requirement: Int {
+        switch self {
+        case .food, .water, .wood: return 20
+        case .nights: return 10
+        }
+    }
+}
+
 struct Achievement: Codable, Hashable {
-    let id: String
-    let title: String
-    let description: String
-    let requirement: Int
+    let type: AchievementType
+    var progress: Int
     
-    static let collectWater = Achievement(
-        id: "water_100",
-        title: "Water Master",
-        description: "Collect 100 water",
-        requirement: 100
-    )
+    var isUnlocked: Bool {
+        progress >= type.requirement
+    }
     
-    static let collectFood = Achievement(
-        id: "food_75",
-        title: "Food Master",
-        description: "Collect 75 food",
-        requirement: 75
-    )
+    var progressText: String {
+        "Get \(progress)/\(type.requirement) \(type.rawValue.lowercased())."
+    }
     
-    static let collectWood = Achievement(
-        id: "wood_100",
-        title: "Wood Master",
-        description: "Collect 100 wood",
-        requirement: 100
-    )
+    static func == (lhs: Achievement, rhs: Achievement) -> Bool {
+        lhs.type == rhs.type
+    }
     
-    static let surviveNights = Achievement(
-        id: "survive_10",
-        title: "Survivor",
-        description: "Survive 10 nights",
-        requirement: 10
-    )
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(type)
+    }
+}
+
+extension Achievement {
+    static func initial(type: AchievementType) -> Achievement {
+        Achievement(type: type, progress: 0)
+    }
 }

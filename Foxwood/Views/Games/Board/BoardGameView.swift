@@ -11,11 +11,6 @@ struct BoardGameView: View {
     @ObservedObject var viewModel: BoardGameViewModel
     @EnvironmentObject private var navigationManager: NavigationManager
     
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-    
-    private var isPortrait: Bool { verticalSizeClass == .regular }
-    private var isIPhone: Bool { UIDevice.current.userInterfaceIdiom == .phone }
-    
     var body: some View {
         GeometryReader { geo in
             let width = geo.size.width
@@ -59,11 +54,6 @@ struct BoardGameView: View {
                     )
                     
                     Spacer()
-                    
-                    // MARK: OrientationMessage
-                    if isPortrait && isIPhone {
-                        orientationMessage
-                    }
                 }
                 .padding()
                 
@@ -99,24 +89,6 @@ struct BoardGameView: View {
                 }
             }
         }
-    }
-    
-    // MARK: - orientationMessage
-    private var orientationMessage: some View {
-        HStack {
-            Image(systemName: "exclamationmark.circle.fill")
-                .foregroundStyle(.white)
-                .font(.system(size: 25))
-            
-            Text("Use landscape screen orientation while playing a mini-games")
-                .fontModifier(14)
-        }
-        .padding(.vertical, 4)
-        .padding(.horizontal)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .foregroundStyle(.ultraThinMaterial)
-        )
     }
     
     // MARK: - actions

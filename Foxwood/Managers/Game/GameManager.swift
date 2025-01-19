@@ -12,6 +12,7 @@ final class GameManager: ObservableObject {
     @Published private(set) var isPaused: Bool = false
     @Published private(set) var isGameOver: Bool = false
     
+    private let storageManager = StorageManager.shared
     var onGameOver: ((Bool) -> Void)?
     
     func startNewGame() {
@@ -37,6 +38,7 @@ final class GameManager: ObservableObject {
     
     func addResource(_ type: ResourceType, amount: Int = 1) {
         gameState.resources[type] = (gameState.resources[type] ?? 0) + amount
+        updateAchievements(for: type)
         checkWinCondition()
     }
     
@@ -61,7 +63,42 @@ final class GameManager: ObservableObject {
         isGameOver = true
         gameState.isGameOver = true
         gameState.hasWon = hasWon
+        
+        if hasWon {
+            updateNightsAchievement()
+        }
+        
         onGameOver?(hasWon)
+    }
+    
+    private func updateAchievements(for resourceType: ResourceType) {
+        let achievementType: AchievementType
+        switch resourceType {
+        case .wood:
+            achievementType = .wood
+        case .water:
+            achievementType = .water
+        case .food:
+            achievementType = .food
+        }
+        
+        if var achievement = storageManager.achievements.first(where: { $0.type == achievementType }) {
+            achievement.progress += 1
+            storageManager.updateAchievement(achievement)
+        } else {
+            let achievement = Achievement(type: achievementType, progress: 1)
+            storageManager.updateAchievement(achievement)
+        }
+    }
+    
+    private func updateNightsAchievement() {
+        if var achievement = storageManager.achievements.first(where: { $0.type == .nights }) {
+            achievement.progress += 1
+            storageManager.updateAchievement(achievement)
+        } else {
+            let achievement = Achievement(type: .nights, progress: 1)
+            storageManager.updateAchievement(achievement)
+        }
     }
     
     // MARK: - Resource Getters

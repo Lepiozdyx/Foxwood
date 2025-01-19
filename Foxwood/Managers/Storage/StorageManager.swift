@@ -37,8 +37,8 @@ final class StorageManager: ObservableObject {
         loadAchievements()
     }
     
-    func unlockAchievement(_ achievement: Achievement) {
-        achievements.insert(achievement)
+    func updateAchievement(_ achievement: Achievement) {
+        achievements.update(with: achievement)
         saveAchievements()
     }
     
@@ -52,6 +52,7 @@ final class StorageManager: ObservableObject {
     private func saveAchievements() {
         if let encoded = try? JSONEncoder().encode(achievements) {
             defaults.set(encoded, forKey: Keys.achievements)
+            objectWillChange.send()
         }
     }
 }

@@ -30,49 +30,47 @@ struct TutorialView: View {
                 }
                 .padding()
                 
-                ZStack {
-                    BoardView(
-                        width: width / 1.2,
-                        height: height / 1.2
-                    )
-                    .overlay {
-                        VStack {
-                            ScrollViewWithPadding(
-                                contentHeight: height,
-                                boardSize: CGSize(width: width / 1.3, height: height / 1.5)
-                            ) {
-                                contentView
-                            }
+                BoardView(
+                    width: width / 1.2,
+                    height: height / 1.2
+                )
+                .overlay {
+                    VStack {
+                        ScrollViewWithPadding(
+                            contentHeight: height,
+                            boardSize: CGSize(width: width / 1.3, height: height / 1.5)
+                        ) {
+                            contentView
                         }
                     }
-                    .overlay(alignment: .bottom) {
-                        // Navigation buttons
-                        HStack {
-                            Button {
-                                viewModel.moveToPreviousStep()
-                            } label: {
-                                Image(.arrowButton)
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                                    .rotationEffect(.degrees(180))
-                            }
-                            .disabled(viewModel.tutorialState == .welcome)
-                            .opacity(viewModel.tutorialState == .welcome ? 0 : 1)
-                            
-                            Spacer()
-                            
-                            Button {
-                                viewModel.moveToNextStep()
-                            } label: {
-                                Image(.arrowButton)
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                            }
-                            .disabled(viewModel.tutorialState == .tutorialEnd)
-                            .opacity(viewModel.tutorialState == .tutorialEnd ? 0 : 1)
+                }
+                .overlay(alignment: .bottom) {
+                    // Navigation buttons
+                    HStack {
+                        Button {
+                            viewModel.moveToPreviousStep()
+                        } label: {
+                            Image(.arrowButton)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .rotationEffect(.degrees(180))
                         }
-                        .padding(.horizontal)
+                        .disabled(viewModel.tutorialState == .welcome)
+                        .opacity(viewModel.tutorialState == .welcome ? 0 : 1)
+                        
+                        Spacer()
+                        
+                        Button {
+                            viewModel.moveToNextStep()
+                        } label: {
+                            Image(.arrowButton)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                        }
+                        .disabled(viewModel.tutorialState == .tutorialEnd)
+                        .opacity(viewModel.tutorialState == .tutorialEnd ? 0 : 1)
                     }
+                    .padding(.horizontal)
                 }
             }
         }
@@ -105,7 +103,7 @@ struct TutorialView: View {
     private var welcomeView: some View {
         VStack(spacing: 30) {
             Text("Welcome to the “foxwood” forest!")
-                .fontModifier(18)
+                .fontModifier(22)
             
             customDivider
             
@@ -138,6 +136,11 @@ struct TutorialView: View {
                                 .fontModifier(12)
                         }
                     }
+                
+                customDivider
+                
+                Text("Unlock achievements for the resources you get")
+                    .fontModifier(14)
             }
         }
     }
@@ -168,6 +171,12 @@ struct TutorialView: View {
                     .resizable()
                     .frame(width: 150, height: 150)
             }
+            .frame(maxHeight: 500)
+            
+            customDivider
+            
+            Text("Use landscape or portrait screen orientation while playing a mini-games")
+                .fontModifier(14)
         }
     }
     

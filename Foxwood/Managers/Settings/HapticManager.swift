@@ -12,7 +12,6 @@ final class HapticManager {
     
     private let lightGenerator: UIImpactFeedbackGenerator
     private let mediumGenerator: UIImpactFeedbackGenerator
-    private let heavyGenerator: UIImpactFeedbackGenerator
     private let selectionGenerator: UISelectionFeedbackGenerator
     private let notificationGenerator: UINotificationFeedbackGenerator
     
@@ -23,7 +22,6 @@ final class HapticManager {
     private init() {
         lightGenerator = UIImpactFeedbackGenerator(style: .light)
         mediumGenerator = UIImpactFeedbackGenerator(style: .medium)
-        heavyGenerator = UIImpactFeedbackGenerator(style: .heavy)
         selectionGenerator = UISelectionFeedbackGenerator()
         notificationGenerator = UINotificationFeedbackGenerator()
         
@@ -46,7 +44,6 @@ final class HapticManager {
     @objc private func prepareGenerators() {
         lightGenerator.prepare()
         mediumGenerator.prepare()
-        heavyGenerator.prepare()
         selectionGenerator.prepare()
         notificationGenerator.prepare()
     }
@@ -59,14 +56,10 @@ final class HapticManager {
             lightGenerator.impactOccurred(intensity: intensity)
         case .medium:
             mediumGenerator.impactOccurred(intensity: intensity)
-        case .heavy:
-            heavyGenerator.impactOccurred(intensity: intensity)
         case .selection:
             selectionGenerator.selectionChanged()
         case .success:
             notificationGenerator.notificationOccurred(.success)
-        case .warning:
-            notificationGenerator.notificationOccurred(.warning)
         case .error:
             notificationGenerator.notificationOccurred(.error)
         }
@@ -82,10 +75,8 @@ extension HapticManager {
     enum HapticType {
         case light
         case medium
-        case heavy
         case selection
         case success
-        case warning
         case error
     }
 }
