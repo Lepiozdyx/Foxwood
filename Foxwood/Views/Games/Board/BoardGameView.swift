@@ -87,10 +87,10 @@ struct BoardGameView: View {
                     )
                 }
                 
-                // MARK: GameOver View
+                // MARK: EndGameView
                 if viewModel.isGameOver {
-                    GameOverView(
-                        success: viewModel.hasWon,
+                    EndGameView(
+                        result: viewModel.hasWon,
                         onExit: {
                             viewModel.resetGame()
                             navigationManager.navigateToMenu()

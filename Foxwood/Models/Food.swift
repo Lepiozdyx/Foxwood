@@ -15,7 +15,7 @@ enum FoodGameConstants {
     static let requiredFoodCount = 10
     static let itemGenerationPeriod: TimeInterval = 0.65
     static let itemFallingDuration: TimeInterval = 2.2
-    static let maxFallingItems = 40
+    static let maxFallingItems = 45
     static let itemSize: CGFloat = 60
 }
 
