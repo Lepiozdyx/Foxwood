@@ -4,10 +4,7 @@ import UIKit
 
 final class NetworkManager: ObservableObject {
     @Published private(set) var checkedURL: URL?
-    
-//    static let initial = URL(string: "https://spiritgaming.xyz/icon?page=test")!
     static let initial = URL(string: "https://foxwoodonline.pro/get")!
-    
     private let storage: UserDefaults
     private var didSaveURL = false
     
