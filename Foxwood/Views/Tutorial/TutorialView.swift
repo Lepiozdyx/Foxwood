@@ -85,10 +85,10 @@ struct TutorialView: View {
         case .tutorialEnd:
             VStack(spacing: 40) {
                 Text("Good luck and have fun!")
-                    .fontModifier(22)
+                    .fontModifier(24)
                 Image(.logo)
                     .resizable()
-                    .frame(width: 90, height: 100)
+                    .frame(width: 110, height: 120)
             }
         }
     }
@@ -97,13 +97,13 @@ struct TutorialView: View {
     private var welcomeView: some View {
         VStack(spacing: 30) {
             Text("Welcome to the “foxwood” forest!")
-                .fontModifier(22)
+                .fontModifier(24)
             
             customDivider
             
             VStack(spacing: 20) {
                 Text("Your goal is to gather resources to survive the night.")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 HStack(spacing: 20) {
                     Image(.wood)
@@ -115,26 +115,26 @@ struct TutorialView: View {
                 customDivider
                 
                 Text("You have only 10 moves before nightfall. Get your resources together. Good luck!")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 Image(.greenUnderlay)
                     .resizable()
-                    .frame(width: 120, height: 100)
+                    .frame(width: 160, height: 120)
                     .overlay {
                         VStack(spacing: 4) {
                             Text("wood 0/2")
-                                .fontModifier(12)
+                                .fontModifier(16)
                             Text("Water 0/2")
-                                .fontModifier(12)
+                                .fontModifier(16)
                             Text("Food 0/2")
-                                .fontModifier(12)
+                                .fontModifier(16)
                         }
                     }
                 
                 customDivider
                 
                 Text("Unlock achievements for the resources you get")
-                    .fontModifier(14)
+                    .fontModifier(18)
             }
         }
     }
@@ -143,17 +143,17 @@ struct TutorialView: View {
     private var fieldView: some View {
         VStack(spacing: 30) {
             Text("Main game field")
-                .fontModifier(18)
+                .fontModifier(24)
             
             customDivider
             
             VStack(spacing: 10) {
                 Text("Click on the game cells to open them to find resources")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 Image(.miniboard)
                     .resizable()
-                    .frame(width: 150, height: 150)
+                    .frame(width: 180, height: 180)
                     .overlay {
                         Image(systemName: "hand.tap.fill")
                             .font(.system(size: 60))
@@ -163,14 +163,14 @@ struct TutorialView: View {
                 
                 Image(.board2)
                     .resizable()
-                    .frame(width: 150, height: 150)
+                    .frame(width: 180, height: 180)
             }
             .frame(maxHeight: 500)
             
             customDivider
             
             Text("Use landscape or portrait screen orientation while playing a mini-games")
-                .fontModifier(14)
+                .fontModifier(18)
         }
     }
     
@@ -178,13 +178,13 @@ struct TutorialView: View {
     private var cagesView: some View {
         VStack(spacing: 30) {
             Text("Game cells with mini-games.")
-                .fontModifier(18)
+                .fontModifier(24)
             
             customDivider
             
             VStack(spacing: 10) {
                 Text("You can't make your next move until you play.")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 HStack(spacing: 10) {
                     Image(.woodCube)
@@ -196,14 +196,14 @@ struct TutorialView: View {
                 customDivider
                 
                 Text("Empty game cell - does not spend moves. You may continue to make your next move")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 Image(.emptyCube)
                 
                 customDivider
                 
                 Text("game cell with a spider web is a trap, opening such a cell you lose 1 move")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 Image(.webCube)
             }
@@ -214,19 +214,19 @@ struct TutorialView: View {
     private var resourcesView: some View {
         VStack(spacing: 30) {
             Text("Mini-games")
-                .fontModifier(18)
+                .fontModifier(24)
             
             customDivider
             
             VStack(spacing: 20) {
                 Text("After you open a game cell with the resource, complete the mini-game to get it")
-                    .fontModifier(14)
+                    .fontModifier(18)
                 
                 customDivider
                 
                 VStack {
                     Text("- The game of getting food. \nYou need to catch resources by using taps. Time limit 30 seconds.")
-                        .fontModifier(12)
+                        .fontModifier(18)
                     
                     HStack {
                         Image(.mushroomButton)
@@ -257,13 +257,13 @@ struct TutorialView: View {
                             .shadow(color: .black, radius: 2, x: -3, y: 3)
                     }
                 }
-                .frame(maxHeight: 350)
+                .frame(height: 250, alignment: .top)
                 
                 customDivider
                 
                 VStack {
                     Text("- The game of getting water. \nControl a moving object by swiping on the screen to catch a drop of water. Time limit 30 seconds.")
-                        .fontModifier(12)
+                        .fontModifier(18)
                     
                     HStack(spacing: 20) {
                         Image(.waterdrop)
@@ -283,12 +283,13 @@ struct TutorialView: View {
                             }
                     }
                 }
+                .frame(height: 250, alignment: .top)
                 
                 customDivider
                 
                 VStack {
                     Text("- The game of getting wood. \nYour task is to make a series of five accurate hits in time by pressing the button. Watch the indicator, it must be in the “green” zone. There are three chances to miss! No time limits.")
-                        .fontModifier(12)
+                        .fontModifier(18)
                     
                     HStack(spacing: 20) {
                         Image(.scale)
@@ -300,6 +301,7 @@ struct TutorialView: View {
                             .frame(width: 35, height: 35)
                     }
                 }
+                .frame(height: 300, alignment: .top)
             }
         }
     }

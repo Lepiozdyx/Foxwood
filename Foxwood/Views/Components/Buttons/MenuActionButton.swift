@@ -11,7 +11,7 @@ struct MenuActionButton: View {
         } label: {
             Image(image)
                 .resizable()
-                .frame(width: 40, height: 40)
+                .frame(width: 45, height: 45)
         }
         .playSound()
     }

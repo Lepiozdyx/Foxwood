@@ -142,7 +142,8 @@ struct MovesCounterView: View {
                 .frame(width: 150, height: 50)
             
             Text("Step \(movesLeft)/10")
-                .fontModifier(16)
+                .fontModifier(18)
+                .shadow(color: .black, radius: 1)
         }
         .offset(y: -15)
     }
@@ -160,19 +161,20 @@ struct ResourceCounterView: View {
             .frame(width: 130, height: 110)
             .shadow(color: .black, radius: 4, x: -2, y: 2)
             .overlay {
-                VStack(spacing: 8) {
+                VStack(spacing: 4) {
                     Text("Collection rate")
                         .fontModifier(12)
                     VStack(spacing: 4) {
                         Text("wood - \(woodCount)/2")
-                            .fontModifier(10)
+                            .fontModifier(14)
                         Text("water - \(waterCount)/2")
-                            .fontModifier(10)
+                            .fontModifier(14)
                         Text("food - \(foodCount)/2")
-                            .fontModifier(10)
+                            .fontModifier(14)
                     }
                 }
-                .offset(y: -10)
+                .shadow(color: .black, radius: 1)
+                .offset(y: -5)
             }
     }
 }
