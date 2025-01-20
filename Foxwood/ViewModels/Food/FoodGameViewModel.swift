@@ -1,9 +1,3 @@
-//
-//  FoodGameViewModel.swift
-//  Foxwood
-//
-//  Created by Alex on 15.01.2025.
-//
 
 import Combine
 import SwiftUI

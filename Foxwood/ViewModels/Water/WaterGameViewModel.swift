@@ -1,9 +1,3 @@
-//
-//  WaterGameViewModel.swift
-//  Foxwood
-//
-//  Created by Alex on 16.01.2025.
-//
 
 import Foundation
 import SwiftUI
@@ -37,16 +31,14 @@ final class WaterGameViewModel: ObservableObject {
     func updateLayout(bounds: CGRect, safeArea: EdgeInsets) {
         screenBounds = bounds
         safeAreaInsets = safeArea
-        
-        // Рассчитываем игровую область используя всю доступную ширину
-        // и высоту до границ безопасной зоны
+
         let statusBarTotalHeight = WaterGameConstants.statusBarHeight + safeArea.top
         
         gameArea = CGRect(
-            x: 0, // Начинаем от левого края
-            y: statusBarTotalHeight, // Учитываем высоту статус бара
-            width: bounds.width, // Используем всю ширину
-            height: bounds.height - statusBarTotalHeight - safeArea.bottom // Учитываем нижнюю safe area
+            x: 0,
+            y: statusBarTotalHeight,
+            width: bounds.width,
+            height: bounds.height - statusBarTotalHeight - safeArea.bottom
         )
         
         if case .initial = gameState {
@@ -58,7 +50,7 @@ final class WaterGameViewModel: ObservableObject {
     func handleDrag(start: CGPoint, end: CGPoint) {
         let xDist = abs(end.x - start.x)
         let yDist = abs(end.y - start.y)
-        let minDistance: CGFloat = 30 // Минимальное расстояние для срабатывания жеста
+        let minDistance: CGFloat = 30
         
         guard xDist > minDistance || yDist > minDistance else { return }
         
@@ -145,17 +137,13 @@ final class WaterGameViewModel: ObservableObject {
         
         var newSegments = segments
         let movement = direction.movement
-        
-        // Сохраняем предыдущие позиции для правильного следования
         let previousPositions = segments.map { $0.position }
         
-        // Рассчитываем новую позицию головы
         let newHeadPosition = CGPoint(
             x: segments[0].position.x + movement.x,
             y: segments[0].position.y + movement.y
         )
         
-        // Проверяем, находится ли новая позиция в пределах игровой области
         guard gameArea.contains(CGPoint(
             x: newHeadPosition.x,
             y: newHeadPosition.y
@@ -164,21 +152,16 @@ final class WaterGameViewModel: ObservableObject {
             return
         }
         
-        // Обновляем позицию головы
         newSegments[0].position = newHeadPosition
         
-        // Обновляем позиции тела змейки
         for i in 1..<segments.count {
             let previousSegment = previousPositions[i - 1]
             let currentSegment = previousPositions[i]
-            
-            // Вычисляем вектор направления к предыдущему сегменту
             let dx = previousSegment.x - currentSegment.x
             let dy = previousSegment.y - currentSegment.y
             let distance = sqrt(dx * dx + dy * dy)
             
             if distance > segmentSpacing {
-                // Нормализуем вектор и устанавливаем новую позицию
                 let normalizedDx = dx / distance
                 let normalizedDy = dy / distance
                 let newX = previousSegment.x - normalizedDx * segmentSpacing
@@ -215,7 +198,6 @@ final class WaterGameViewModel: ObservableObject {
     private func generateNewDrop() {
         let padding = WaterGameConstants.dropSize
         
-        // Обновленные границы для генерации капель
         let randomX = CGFloat.random(
             in: (gameArea.minX + padding)...(gameArea.maxX - padding)
         )
@@ -229,7 +211,6 @@ final class WaterGameViewModel: ObservableObject {
     private func addSegment() {
         guard let lastSegment = segments.last else { return }
         
-        // Вычисляем позицию нового сегмента
         let direction: CGPoint
         if segments.count > 1 {
             let previousSegment = segments[segments.count - 2].position
@@ -241,7 +222,6 @@ final class WaterGameViewModel: ObservableObject {
                 y: dy / distance * segmentSpacing
             )
         } else {
-            // Если это первый дополнительный сегмент, добавляем его позади головы
             direction = CGPoint(
                 x: -self.direction.movement.x * segmentSpacing,
                 y: -self.direction.movement.y * segmentSpacing
@@ -257,7 +237,6 @@ final class WaterGameViewModel: ObservableObject {
     }
     
     private func resetPositions() {
-        // Размещаем змейку в центре игровой области
         let centerX = gameArea.midX
         let centerY = gameArea.midY
         

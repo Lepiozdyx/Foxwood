@@ -1,9 +1,3 @@
-//
-//  Font+Extension.swift
-//  Foxwood
-//
-//  Created by Alex on 10.01.2025.
-//
 
 import SwiftUI
 

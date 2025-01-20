@@ -1,15 +1,9 @@
-//
-//  Wood.swift
-//  Foxwood
-//
-//  Created by Alex on 18.01.2025.
-//
 
 import Foundation
 
 enum WoodGameConstants {
     // Game Settings
-    static let targetZoneWidth: CGFloat = 0.2 // 20% of total width
+    static let targetZoneWidth: CGFloat = 0.2 
     static let indicatorSpeed: CGFloat = 1.5
     static let requiredSuccessStreak = 5
     static let maxMisses = 3

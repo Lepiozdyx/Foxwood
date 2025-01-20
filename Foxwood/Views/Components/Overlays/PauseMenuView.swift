@@ -1,9 +1,3 @@
-//
-//  PauseMenuView.swift
-//  Foxwood
-//
-//  Created by Alex on 13.01.2025.
-//
 
 import SwiftUI
 

@@ -1,9 +1,3 @@
-//
-//  EndGameView.swift
-//  Foxwood
-//
-//  Created by Alex on 19.01.2025.
-//
 
 import SwiftUI
 

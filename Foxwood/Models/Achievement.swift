@@ -1,9 +1,3 @@
-//
-//  Achievement.swift
-//  Foxwood
-//
-//  Created by Alex on 14.01.2025.
-//
 
 import Foundation
 
@@ -39,7 +33,7 @@ struct Achievement: Codable, Hashable {
     }
     
     var progressText: String {
-        "Get \(progress)/\(type.requirement) \(type.rawValue.lowercased())."
+        "Get \(progress)/\(type.requirement) \(type.rawValue.lowercased())"
     }
     
     static func == (lhs: Achievement, rhs: Achievement) -> Bool {

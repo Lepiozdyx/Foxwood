@@ -1,9 +1,3 @@
-//
-//  HapticManager.swift
-//  Foxwood
-//
-//  Created by Alex on 13.01.2025.
-//
 
 import UIKit
 
@@ -70,7 +64,6 @@ final class HapticManager {
     }
 }
 
-// MARK: - Haptic Types
 extension HapticManager {
     enum HapticType {
         case light
@@ -81,7 +74,7 @@ extension HapticManager {
     }
 }
 
-// MARK: - UIDevice Extension
+// MARK: - extension UIDevice
 private extension UIDevice {
     var hasHapticFeedback: Bool {
         if #available(iOS 13.0, *) {

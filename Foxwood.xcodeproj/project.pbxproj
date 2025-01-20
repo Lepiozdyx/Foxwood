@@ -10,9 +10,22 @@
 		FAC1D7DE2D314F5D00070237 /* Foxwood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Foxwood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FA12B3E82D3D899400E6C3F8 /* Exceptions for "Foxwood" folder in "Foxwood" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FAC1D7DD2D314F5D00070237 /* Foxwood */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FAC1D7E02D314F5D00070237 /* Foxwood */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FA12B3E82D3D899400E6C3F8 /* Exceptions for "Foxwood" folder in "Foxwood" target */,
+			);
 			path = Foxwood;
 			sourceTree = "<group>";
 		};
@@ -254,6 +267,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Foxwood/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Foxwood/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Foxwood;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -288,6 +302,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Foxwood/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Foxwood/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Foxwood;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

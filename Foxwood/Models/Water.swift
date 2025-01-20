@@ -1,9 +1,3 @@
-//
-//  Water.swift
-//  Foxwood
-//
-//  Created by Alex on 16.01.2025.
-//
 
 import Foundation
 import SwiftUI
@@ -19,8 +13,8 @@ enum WaterGameConstants {
     static let dropSize: CGFloat = 27
     
     // Movement and Layout
-    static let moveSpeed: CGFloat = 3.5  // 5 скорость движения
-    static let updateInterval: TimeInterval = 1/60  // частота обновления для плавности
+    static let moveSpeed: CGFloat = 3.5
+    static let updateInterval: TimeInterval = 1/60  
     static let borderPadding: CGFloat = 30
     static let statusBarSpacing: CGFloat = 10
     static let statusBarHeight: CGFloat = 50

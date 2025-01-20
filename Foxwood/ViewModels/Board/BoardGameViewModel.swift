@@ -1,9 +1,3 @@
-//
-//  BoardGameViewModel.swift
-//  Foxwood
-//
-//  Created by Alex on 14.01.2025.
-//
 
 import Foundation
 import SwiftUI
@@ -41,7 +35,6 @@ final class BoardGameViewModel: ObservableObject {
     }
     
     private func createBoard() {
-        // Create board from current layout
         var newCells: [[Cell]] = []
         let layout = BoardConfiguration.layouts[currentLayout]
         
@@ -63,7 +56,6 @@ final class BoardGameViewModel: ObservableObject {
     }
     
     func revealCell(at position: Cell.Position) -> CellType? {
-        // Если есть незавершенная мини-игра, запрещаем открывать новые клетки
         guard !isPaused && pendingResourceCell == nil,
               position.row >= 0 && position.row < BoardConfiguration.boardSize,
               position.column >= 0 && position.column < BoardConfiguration.boardSize,
@@ -84,7 +76,6 @@ final class BoardGameViewModel: ObservableObject {
             gameManager.decrementMoves()
         case .wood, .water, .mushroom, .berries:
             gameManager.decrementMoves()
-            // Сохраняем информацию о ресурсной клетке, которую нужно обработать
             pendingResourceCell = (position, cellType)
         }
         

@@ -1,18 +1,10 @@
-//
-//  SoundManager.swift
-//  Foxwood
-//
-//  Created by Alex on 13.01.2025.
-//
 
 import AVKit
 
 final class SoundManager {
     static let shared = SoundManager()
-    
     var soundPlayer: AVAudioPlayer?
     var musicPlayer: AVAudioPlayer?
-    
     private var wasPlayingBeforeBackground = false
     
     private init() {

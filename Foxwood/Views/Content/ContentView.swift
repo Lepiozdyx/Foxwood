@@ -1,17 +1,27 @@
-//
-//  ContentView.swift
-//  Foxwood
-//
-//  Created by Alex on 10.01.2025.
-//
 
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = ContentViewModel()
+    
     var body: some View {
-        VStack {
-            NavigationRootView()
-                .transition(.opacity)
+        Group {
+            switch viewModel.appState {
+            case .loading:
+                LoadingView()
+            case .initialWebView:
+                if let url = viewModel.networkManager.checkedURL {
+                    InitialWebView(url: url, networkManager: viewModel.networkManager)
+                } else {
+                    InitialWebView(url: NetworkManager.initial, networkManager: viewModel.networkManager)
+                }
+            case .navigationRoot:
+                NavigationRootView()
+                    .transition(.opacity)
+            }
+        }
+        .onAppear {
+            viewModel.onAppear()
         }
     }
 }

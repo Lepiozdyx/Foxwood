@@ -1,9 +1,3 @@
-//
-//  NavigationManager.swift
-//  Foxwood
-//
-//  Created by Alex on 13.01.2025.
-//
 
 import SwiftUI
 
@@ -39,12 +33,10 @@ final class NavigationManager: ObservableObject {
     @Published var currentScreen: Screen = .menu
     @Published var navigationStack: [Screen] = []
     
-    // Добавляем GameManager как свойство NavigationManager
     let gameManager = GameManager()
     
     func navigate(to screen: Screen) {
         withAnimation {
-            // Если переходим к игре из меню, убеждаемся что все состояния сброшены
             if screen == .boardGame && currentScreen == .menu {
                 gameManager.resetGame()
             }
@@ -65,7 +57,6 @@ final class NavigationManager: ObservableObject {
         withAnimation {
             currentScreen = .menu
             navigationStack.removeAll()
-            // Сбрасываем состояние игры только при возврате в меню
             gameManager.resetGame()
         }
     }

@@ -1,9 +1,3 @@
-//
-//  StorageManager.swift
-//  Foxwood
-//
-//  Created by Alex on 14.01.2025.
-//
 
 import Foundation
 

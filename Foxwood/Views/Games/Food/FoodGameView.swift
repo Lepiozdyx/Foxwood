@@ -1,9 +1,3 @@
-//
-//  FoodGameView.swift
-//  Foxwood
-//
-//  Created by Alex on 14.01.2025.
-//
 
 import SwiftUI
 
@@ -123,7 +117,6 @@ struct FallingFoodItemView: View {
                 onTap()
             }
             .onAppear {
-                // TODO: Add more complex animations
                 withAnimation(.linear(duration: FoodGameConstants.itemFallingDuration)) {
                     offset = screenHeight + FoodGameConstants.itemSize * 2
                 }
