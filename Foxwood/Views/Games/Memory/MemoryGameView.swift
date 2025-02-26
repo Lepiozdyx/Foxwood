@@ -26,10 +26,11 @@ struct MemoryGameView: View {
                     VStack {
                         // Timer
                         MemoryGameStatusBar(
-                            timeRemaining: viewModel.timeRemaining,
-                            pairsMatched: viewModel.pairsMatched,
-                            totalPairs: viewModel.totalPairs
+                            menuAction: viewModel.togglePauseMenu,
+                            timeRemaining: viewModel.timeRemaining
                         )
+                        .padding(.top)
+                        .padding(.horizontal)
                         
                         Spacer()
                         
@@ -69,19 +70,9 @@ struct MemoryGameView: View {
                         )
                         
                         Spacer()
-                        
-                        // Menu button
-                        HStack {
-                            MenuActionButton(image: .menuButton) {
-                                viewModel.togglePauseMenu()
-                            }
-                            .padding()
-                            
-                            Spacer()
-                        }
                     }
                     
-                case .finished(let success):
+                case .finished(_):
                     EmptyView()
                 }
                 
@@ -115,36 +106,27 @@ struct MemoryGameView: View {
 
 // MARK: - Memory Game Status Bar
 struct MemoryGameStatusBar: View {
+    let menuAction: () -> Void
     let timeRemaining: TimeInterval
-    let pairsMatched: Int
-    let totalPairs: Int
     
     var body: some View {
         HStack {
-            // Timer
-            ZStack {
-                Image(.hexagon)
-                    .resizable()
-                    .frame(width: 150, height: 50)
-                
-                Text(String(format: "%.0f", timeRemaining))
-                    .fontModifier(24)
-                    .foregroundColor(timeRemaining < 10 ? .red : .white)
+            MenuActionButton(image: .menuButton) {
+                menuAction()
             }
             
             Spacer()
             
-            // Pairs counter
             ZStack {
                 Image(.hexagon)
                     .resizable()
-                    .frame(width: 150, height: 50)
+                    .frame(width: 130, height: 50)
                 
-                Text("\(pairsMatched)/\(totalPairs)")
+                Text(String(format: "%.0f", timeRemaining))
                     .fontModifier(24)
+                    .colorMultiply(timeRemaining < 10 ? .red : .white)
             }
         }
-        .padding()
     }
 }
 

@@ -4,7 +4,7 @@ import Combine
 
 @MainActor
 final class MemoryGameViewModel: ObservableObject {
-    // MARK: - Published Properties
+    // MARK: Published Properties
     @Published private(set) var gameState: MemoryGameState = .initial
     @Published private(set) var cards: [MemoryCard] = []
     @Published private(set) var timeRemaining: TimeInterval = MemoryGameConstants.gameDuration
@@ -12,15 +12,36 @@ final class MemoryGameViewModel: ObservableObject {
     @Published private(set) var secondCardFlipped: MemoryCard? = nil
     @Published var showingPauseMenu = false
     @Published private(set) var isProcessingPair = false
-    @Published private(set) var disableCardInteraction = false
     
-    // MARK: - Private Properties
+    // MARK: Computed Properties
+    var disableCardInteraction: Bool {
+        /// Disable interaction if:
+        /// 1. Game is not in playing state
+        /// 2. Game is paused
+        /// 3. Processing a pair
+        /// 4. Two or more cards are face up
+        let faceUpCount = cards.filter { $0.state == .faceUp }.count
+        return gameState != .playing ||
+               showingPauseMenu ||
+               isProcessingPair ||
+               faceUpCount >= 2
+    }
+    
+    var pairsMatched: Int {
+        cards.filter { $0.state == .matched }.count / 2
+    }
+    
+    var totalPairs: Int {
+        MemoryGameConstants.pairsCount
+    }
+    
+    // MARK: Private Properties
     private var gameTimer: AnyCancellable?
     private var countdownTimer: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
     private let onGameComplete: ((Bool) -> Void)?
     
-    // MARK: - Initialization
+    // MARK: Initialization
     init(onGameComplete: ((Bool) -> Void)? = nil) {
         self.onGameComplete = onGameComplete
         setupNewGame()
@@ -34,7 +55,6 @@ final class MemoryGameViewModel: ObservableObject {
         firstCardFlipped = nil
         secondCardFlipped = nil
         isProcessingPair = false
-        disableCardInteraction = false
         gameState = .initial
         startGame()
     }
@@ -81,33 +101,33 @@ final class MemoryGameViewModel: ObservableObject {
     }
     
     func flipCard(at position: MemoryCard.Position) {
-        // Немедленно блокируем взаимодействие, если пара уже обрабатывается
-        guard !disableCardInteraction else { return }
-        
-        // Блокируем, если игра не в состоянии playing или если включено паузное меню
-        guard case .playing = gameState, !showingPauseMenu else { return }
-        
-        // Если уже выбраны две карточки, не разрешаем дальнейшие нажатия
-        if firstCardFlipped != nil && secondCardFlipped != nil {
+        // Prevent any interaction if cards should be disabled
+        if disableCardInteraction {
             return
         }
         
-        // Находим карточку по указанной позиции
+        // Find the card at the specified position
         guard let cardIndex = cards.firstIndex(where: { $0.position == position }) else { return }
+        
         let card = cards[cardIndex]
         
-        // Разрешаем переворот только если карточка лежит рубашкой вниз
+        // Only allow flipping face-down cards
         guard card.state == .faceDown else { return }
         
-        // Если это вторая карточка
-        if let firstCard = firstCardFlipped {
+        // If we already have one card flipped
+        if let firstCard = firstCardFlipped, secondCardFlipped == nil {
+            // Record second card
             secondCardFlipped = card
-            cards[cardIndex].state = .faceUp
             
-            // Сразу блокируем дальнейшее взаимодействие, пока не обработаем пару
-            disableCardInteraction = true
+            // Flip the card
+            var updatedCards = cards
+            updatedCards[cardIndex].state = .faceUp
+            cards = updatedCards
             
-            // Проверяем совпадение
+            // Set processing flag to prevent further interactions
+            isProcessingPair = true
+            
+            // Check for match
             if firstCard.imageIdentifier == card.imageIdentifier {
                 handleMatch(first: firstCard, second: card)
             } else {
@@ -116,10 +136,14 @@ final class MemoryGameViewModel: ObservableObject {
             
             HapticManager.shared.play(.light)
         }
-        // Если это первая карточка
-        else {
+        // If this is the first card being flipped
+        else if firstCardFlipped == nil {
             firstCardFlipped = card
-            cards[cardIndex].state = .faceUp
+            
+            // Flip the card
+            var updatedCards = cards
+            updatedCards[cardIndex].state = .faceUp
+            cards = updatedCards
             
             HapticManager.shared.play(.light)
         }
@@ -186,7 +210,7 @@ final class MemoryGameViewModel: ObservableObject {
             // Reset the selection state
             self.firstCardFlipped = nil
             self.secondCardFlipped = nil
-            self.disableCardInteraction = false
+            self.isProcessingPair = false
             
             // Play success haptic
             HapticManager.shared.play(.success)
@@ -221,7 +245,7 @@ final class MemoryGameViewModel: ObservableObject {
             // Reset the selection state
             self.firstCardFlipped = nil
             self.secondCardFlipped = nil
-            self.disableCardInteraction = false
+            self.isProcessingPair = false
             
             // Play error haptic
             HapticManager.shared.play(.error)
@@ -238,16 +262,5 @@ final class MemoryGameViewModel: ObservableObject {
         gameTimer?.cancel()
         HapticManager.shared.play(success ? .success : .error)
         gameState = .finished(success: success)
-    }
-}
-
-// MARK: - Computed Properties
-extension MemoryGameViewModel {
-    var pairsMatched: Int {
-        cards.filter { $0.state == .matched }.count / 2
-    }
-    
-    var totalPairs: Int {
-        MemoryGameConstants.pairsCount
     }
 }

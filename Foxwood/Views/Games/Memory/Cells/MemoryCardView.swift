@@ -19,7 +19,6 @@ struct MemoryCardView: View {
                 Image(.greenCube)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .opacity(flipped ? 0 : 1)
                 
                 // Card front (when face up)
                 ZStack {
@@ -42,10 +41,8 @@ struct MemoryCardView: View {
             )
         }
         .buttonStyle(.plain)
-        .disabled(card.state != .faceDown || isInteractionDisabled)
         .playSound()
         .onAppear {
-            // Синхронизировать флаг flipped с состоянием при появлении
             flipped = card.state != .faceDown
             rotation = flipped ? 180 : 0
             scale = card.state == .matched ? 0.9 : 1.0
@@ -93,6 +90,4 @@ struct MemoryCardView: View {
             isInteractionDisabled: true
         )
     }
-    .padding()
-    .background(Color.gray)
 }
