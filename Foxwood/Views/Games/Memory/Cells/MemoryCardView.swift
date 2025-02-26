@@ -21,17 +21,12 @@ struct MemoryCardView: View {
                     .aspectRatio(contentMode: .fit)
                 
                 // Card front (when face up)
-                ZStack {
-                    Image(.emptyCube)
+                if let cardImage = MemoryCardImage(rawValue: card.imageIdentifier) {
+                    Image(cardImage.imageName)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                    
-                    Image(systemName: "\(card.imageIdentifier).circle")
-                        .font(.system(size: 30, weight: .bold))
-                        .foregroundColor(.white)
-                        .shadow(color: .black, radius: 2, x: 1, y: 1)
+                        .opacity(flipped ? 1 : 0)
                 }
-                .opacity(flipped ? 1 : 0)
             }
             .frame(minWidth: 50, minHeight: 50)
             .scaleEffect(scale)
