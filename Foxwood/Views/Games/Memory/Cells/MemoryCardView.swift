@@ -4,6 +4,7 @@ import SwiftUI
 struct MemoryCardView: View {
     let card: MemoryCard
     let onTap: () -> Void
+    let isInteractionDisabled: Bool
     
     @State private var scale: CGFloat = 1.0
     @State private var rotation: Double = 0
@@ -11,13 +12,7 @@ struct MemoryCardView: View {
     
     var body: some View {
         Button {
-            if card.state == .faceDown {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                    rotation += 180
-                    flipped = true
-                }
-                onTap()
-            }
+            onTap()
         } label: {
             ZStack {
                 // Card back (when face down)
@@ -47,26 +42,30 @@ struct MemoryCardView: View {
             )
         }
         .buttonStyle(.plain)
-        .disabled(card.state == .matched)
+        .disabled(card.state != .faceDown || isInteractionDisabled)
         .playSound()
+        .onAppear {
+            // Синхронизировать флаг flipped с состоянием при появлении
+            flipped = card.state != .faceDown
+            rotation = flipped ? 180 : 0
+            scale = card.state == .matched ? 0.9 : 1.0
+        }
         .onChange(of: card.state) { newState in
             switch newState {
             case .faceDown:
-                if flipped {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                        rotation += 180
-                        flipped = false
-                    }
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    rotation = 0
+                    flipped = false
                 }
             case .faceUp:
-                if !flipped {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                        rotation += 180
-                        flipped = true
-                    }
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    rotation = 180
+                    flipped = true
                 }
             case .matched:
                 withAnimation(.easeInOut(duration: 0.3)) {
+                    rotation = 180
+                    flipped = true
                     scale = 0.9
                 }
             }
@@ -78,17 +77,22 @@ struct MemoryCardView: View {
     VStack {
         MemoryCardView(
             card: MemoryCard(imageIdentifier: 1, position: .init(row: 0, column: 0)),
-            onTap: {}
+            onTap: {},
+            isInteractionDisabled: false
         )
         
         MemoryCardView(
             card: MemoryCard(imageIdentifier: 2, state: .faceUp, position: .init(row: 0, column: 1)),
-            onTap: {}
+            onTap: {},
+            isInteractionDisabled: false
         )
         
         MemoryCardView(
             card: MemoryCard(imageIdentifier: 3, state: .matched, position: .init(row: 0, column: 2)),
-            onTap: {}
+            onTap: {},
+            isInteractionDisabled: true
         )
     }
+    .padding()
+    .background(Color.gray)
 }

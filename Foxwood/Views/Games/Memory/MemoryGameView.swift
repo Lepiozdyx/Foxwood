@@ -48,9 +48,11 @@ struct MemoryGameView: View {
                                             if let card = viewModel.cards.first(where: {
                                                 $0.position.row == row && $0.position.column == column
                                             }) {
-                                                MemoryCardView(card: card) {
-                                                    viewModel.flipCard(at: card.position)
-                                                }
+                                                MemoryCardView(
+                                                    card: card,
+                                                    onTap: { viewModel.flipCard(at: card.position) },
+                                                    isInteractionDisabled: viewModel.disableCardInteraction
+                                                )
                                             } else {
                                                 Color.clear
                                                     .aspectRatio(1, contentMode: .fit)
