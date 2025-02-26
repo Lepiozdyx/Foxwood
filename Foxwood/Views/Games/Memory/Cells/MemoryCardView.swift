@@ -28,7 +28,6 @@ struct MemoryCardView: View {
                         .opacity(flipped ? 1 : 0)
                 }
             }
-            .frame(minWidth: 50, minHeight: 50)
             .scaleEffect(scale)
             .rotation3DEffect(
                 .degrees(rotation),

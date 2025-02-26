@@ -1,7 +1,6 @@
 
 import SwiftUI
 
-// MARK: - Constants
 enum MemoryGameConstants {
     static let gameDuration: TimeInterval = 90
     static let pairsCount = 12
@@ -9,7 +8,6 @@ enum MemoryGameConstants {
     static let animationDuration: TimeInterval = 0.3
 }
 
-// MARK: - Memory Card Images
 enum MemoryCardImage: Int, CaseIterable {
     case leaf = 1
     case mush
@@ -42,11 +40,18 @@ enum MemoryCardImage: Int, CaseIterable {
     }
 }
 
-// MARK: - Game Models
 enum MemoryCardState {
     case faceDown
     case faceUp
     case matched
+}
+
+enum MemoryGameState: Equatable {
+    case initial
+    case countdown(Int)
+    case playing
+    case paused
+    case finished(success: Bool)
 }
 
 struct MemoryCard: Identifiable, Equatable {
@@ -65,14 +70,6 @@ struct MemoryCard: Identifiable, Equatable {
     }
 }
 
-enum MemoryGameState: Equatable {
-    case initial
-    case countdown(Int)
-    case playing
-    case paused
-    case finished(success: Bool)
-}
-
 // MARK: - Board Setup Configurations
 struct MemoryBoardConfiguration {
     static let boardSize = 5 // 5x5 grid, with center cell empty
@@ -81,7 +78,6 @@ struct MemoryBoardConfiguration {
     // Generate shuffled pairs of cards
     static func generateCards() -> [MemoryCard] {
         var cards: [MemoryCard] = []
-        let cardImages = Array(MemoryCardImage.allCases)
         let totalPairs = MemoryGameConstants.pairsCount
         
         // Create pairs of cards
