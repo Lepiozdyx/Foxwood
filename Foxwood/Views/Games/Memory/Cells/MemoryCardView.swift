@@ -65,23 +65,9 @@ struct MemoryCardView: View {
 }
 
 #Preview {
-    VStack {
-        MemoryCardView(
-            card: MemoryCard(imageIdentifier: 1, position: .init(row: 0, column: 0)),
-            onTap: {},
-            isInteractionDisabled: false
-        )
-        
-        MemoryCardView(
-            card: MemoryCard(imageIdentifier: 2, state: .faceUp, position: .init(row: 0, column: 1)),
-            onTap: {},
-            isInteractionDisabled: false
-        )
-        
-        MemoryCardView(
-            card: MemoryCard(imageIdentifier: 3, state: .matched, position: .init(row: 0, column: 2)),
-            onTap: {},
-            isInteractionDisabled: true
-        )
-    }
+    MemoryCardView(
+        card: MemoryCard(imageIdentifier: 1, position: .init(row: 0, column: 0)),
+        onTap: {},
+        isInteractionDisabled: false
+    )
 }
