@@ -28,7 +28,7 @@ struct GameOverView: View {
                     VStack(spacing: 20) {
                         Text(success ?
                              "All right! You did it!" :
-                             "You didn't get enough resources"
+                             "You failed :("
                         )
                         .fontModifier(24)
                         .multilineTextAlignment(.center)
@@ -38,7 +38,7 @@ struct GameOverView: View {
                             onExit()
                         } label: {
                             ActionView(
-                                text: "Back to board",
+                                text: "Back",
                                 fontSize: 24,
                                 width: 250,
                                 height: 70

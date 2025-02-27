@@ -85,7 +85,7 @@ struct Game2048HeaderView: View {
     let onMenuTap: () -> Void
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             MenuActionButton(image: .menuButton, action: onMenuTap)
             
             Spacer()
@@ -117,7 +117,6 @@ struct Game2048BoardView: View {
                 cellWidth: cellWidth,
                 spacing: Game2048Constants.tileSpacing
             )
-            .padding(Game2048Constants.tileSpacing)
         }
     }
 }
@@ -181,7 +180,7 @@ struct TileView: View {
         Image(tile.tileImage)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: width, height: width)
+            .frame(width: width)
             .scaleEffect(isAppearing ? 1.0 : (tile.isNew ? 0.5 : 1.0))
             .opacity(isAppearing ? 1.0 : (tile.isNew ? 0.0 : 1.0))
             .onAppear {
