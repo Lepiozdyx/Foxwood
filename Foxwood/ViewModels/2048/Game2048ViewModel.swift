@@ -46,9 +46,13 @@ final class Game2048ViewModel: ObservableObject {
     }
     
     // MARK: - Game Control Methods
-    
     func startGame() {
-        startGameplay()
+        gameState = .playing
+        HapticManager.shared.play(.medium)
+    }
+    
+    func cleanup() {
+        saveBestScore()
     }
     
     func resetGame() {
@@ -58,21 +62,11 @@ final class Game2048ViewModel: ObservableObject {
         startGame()
     }
     
-    func pauseGame() {
-        guard case .playing = gameState else { return }
-        gameState = .paused
-    }
-    
-    func resumeGame() {
-        guard case .paused = gameState else { return }
-        gameState = .playing
-    }
-    
     func togglePauseMenu() {
         if showingPauseMenu {
-            resumeGame()
+            gameState = .playing
         } else {
-            pauseGame()
+            gameState = .paused
         }
         showingPauseMenu.toggle()
     }
@@ -82,12 +76,7 @@ final class Game2048ViewModel: ObservableObject {
         onGameComplete?(success)
     }
     
-    func cleanup() {
-        // No timers to clean up anymore
-    }
-    
     // MARK: - Game Logic
-    
     func move(_ direction: MoveDirection) {
         guard case .playing = gameState, !showingPauseMenu else { return }
         
@@ -99,13 +88,10 @@ final class Game2048ViewModel: ObservableObject {
             saveBestScore()
         }
         
-        // Check for game over
+        // Check for game over or win
         if game.isGameOver {
             finishGame(success: false)
-        }
-        
-        // Check for win
-        if game.hasWon {
+        } else if game.hasWon {
             finishGame(success: true)
         }
         
@@ -116,12 +102,6 @@ final class Game2048ViewModel: ObservableObject {
     }
     
     // MARK: - Private Methods
-    
-    private func startGameplay() {
-        gameState = .playing
-        HapticManager.shared.play(.medium)
-    }
-    
     private func finishGame(success: Bool) {
         gameState = .finished(success: success)
         HapticManager.shared.play(success ? .success : .error)

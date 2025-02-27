@@ -27,7 +27,6 @@ struct Tile: Identifiable, Equatable {
     var position: Position
     var isNew: Bool = true
     var isMerged: Bool = false
-    var mergedFromIDs: (UUID, UUID)? = nil
     
     struct Position: Equatable {
         let row: Int
@@ -38,34 +37,27 @@ struct Tile: Identifiable, Equatable {
         }
     }
     
-    // Get the appropriate color based on tile value
-    var color: Color {
+    var tileImage: ImageResource {
         switch value {
-        case 2: return Color(red: 0.93, green: 0.89, blue: 0.85)
-        case 4: return Color(red: 0.93, green: 0.87, blue: 0.78)
-        case 8: return Color(red: 0.95, green: 0.69, blue: 0.47)
-        case 16: return Color(red: 0.96, green: 0.58, blue: 0.39)
-        case 32: return Color(red: 0.96, green: 0.49, blue: 0.37)
-        case 64: return Color(red: 0.96, green: 0.37, blue: 0.24)
-        case 128: return Color(red: 0.93, green: 0.81, blue: 0.45)
-        case 256: return Color(red: 0.93, green: 0.80, blue: 0.38)
-        case 512: return Color(red: 0.93, green: 0.78, blue: 0.31)
-        case 1024: return Color(red: 0.93, green: 0.77, blue: 0.25)
-        case 2048: return Color(red: 0.93, green: 0.76, blue: 0.18)
-        default: return Color(red: 0.80, green: 0.94, blue: 0.95)
+        case 2: return ._2
+        case 4: return ._4
+        case 8: return ._8
+        case 16: return ._16
+        case 32: return ._32
+        case 64: return ._64
+        case 128: return ._128
+        case 256: return ._256
+        case 512: return ._512
+        case 1024: return ._1024
+//        case 2048: return ._2048
+        default: return ._2048
         }
-    }
-    
-    // Get text color based on tile value
-    var textColor: Color {
-        value <= 4 ? .black : .white
     }
     
     // Reset merge state
     mutating func resetMergeState() {
         isNew = false
         isMerged = false
-        mergedFromIDs = nil
     }
     
     // Implement Equatable
@@ -231,8 +223,7 @@ struct Game2048 {
                             value: mergedValue,
                             position: Tile.Position(row: currentRow - 1, column: column),
                             isNew: false,
-                            isMerged: true,
-                            mergedFromIDs: (aboveTile.id, tile.id)
+                            isMerged: true
                         )
                         board[currentRow][column] = nil
                         
@@ -286,8 +277,7 @@ struct Game2048 {
                             value: mergedValue,
                             position: Tile.Position(row: currentRow + 1, column: column),
                             isNew: false,
-                            isMerged: true,
-                            mergedFromIDs: (belowTile.id, tile.id)
+                            isMerged: true
                         )
                         board[currentRow][column] = nil
                         
@@ -341,8 +331,7 @@ struct Game2048 {
                             value: mergedValue,
                             position: Tile.Position(row: row, column: currentColumn - 1),
                             isNew: false,
-                            isMerged: true,
-                            mergedFromIDs: (leftTile.id, tile.id)
+                            isMerged: true
                         )
                         board[row][currentColumn] = nil
                         
@@ -396,8 +385,7 @@ struct Game2048 {
                             value: mergedValue,
                             position: Tile.Position(row: row, column: currentColumn + 1),
                             isNew: false,
-                            isMerged: true,
-                            mergedFromIDs: (rightTile.id, tile.id)
+                            isMerged: true
                         )
                         board[row][currentColumn] = nil
                         

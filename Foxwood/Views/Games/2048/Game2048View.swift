@@ -144,7 +144,7 @@ struct BoardGridView: View {
             ForEach(positions) { position in
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.black.opacity(0.2))
+                        .fill(.black.opacity(0.2))
                         .frame(width: cellWidth, height: cellWidth)
                     
                     if let tile = tiles.first(where: {
@@ -178,24 +178,17 @@ struct TileView: View {
     @State private var isAppearing = false
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 6)
-                .fill(tile.color)
-                .frame(width: width, height: width)
-                .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 2)
-            
-            Text("\(tile.value)")
-                .font(.system(size: width * 0.4, weight: .bold, design: .rounded))
-                .foregroundStyle(tile.textColor)
-                .animation(.easeInOut(duration: 0.15), value: tile.value)
-        }
-        .scaleEffect(isAppearing ? 1.0 : (tile.isNew ? 0.5 : 1.0))
-        .opacity(isAppearing ? 1.0 : (tile.isNew ? 0.0 : 1.0))
-        .onAppear {
-            withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) {
-                isAppearing = true
+        Image(tile.tileImage)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: width, height: width)
+            .scaleEffect(isAppearing ? 1.0 : (tile.isNew ? 0.5 : 1.0))
+            .opacity(isAppearing ? 1.0 : (tile.isNew ? 0.0 : 1.0))
+            .onAppear {
+                withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) {
+                    isAppearing = true
+                }
             }
-        }
     }
 }
 
