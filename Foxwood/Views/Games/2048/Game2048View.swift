@@ -10,87 +10,67 @@ struct Game2048View: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                BackgroundView()
-                
-                // Game content
-                switch viewModel.gameState {
-                case .playing, .paused, .initial:
-                    VStack {
-                        Game2048HeaderView(
-                            score: viewModel.score,
-                            onMenuTap: viewModel.togglePauseMenu
-                        )
-                        .padding(.horizontal)
-                        .padding(.top)
-                        
-                        Spacer()
-                        
-                        // Game board container
-                        Game2048BoardView(
-                            tiles: viewModel.tiles,
-                            boardSize: Game2048Constants.boardSize,
-                            boardWidth: min(geo.size.width - 60, geo.size.height / 1.8 - 40)
-                        )
-                        .padding()
-                        .gesture(
-                            DragGesture(minimumDistance: 20, coordinateSpace: .local)
-                                .onEnded { value in
-                                    let horizontalAmount = value.translation.width
-                                    let verticalAmount = value.translation.height
-                                    
-                                    if abs(horizontalAmount) > abs(verticalAmount) {
-                                        if horizontalAmount > 0 {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                viewModel.move(.right)
-                                            }
-                                        } else {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                viewModel.move(.left)
-                                            }
-                                        }
-                                    } else {
-                                        if verticalAmount > 0 {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                viewModel.move(.down)
-                                            }
-                                        } else {
-                                            withAnimation(.easeInOut(duration: 0.2)) {
-                                                viewModel.move(.up)
-                                            }
-                                        }
+        ZStack {
+            BackgroundView()
+            
+            switch viewModel.gameState {
+            case .playing, .paused, .initial:
+                VStack {
+                    Game2048HeaderView(
+                        score: viewModel.score,
+                        onMenuTap: viewModel.togglePauseMenu
+                    )
+                    .padding(.horizontal)
+                    .padding(.top)
+                    
+                    Spacer()
+                    
+                    Game2048BoardView(
+                        tiles: viewModel.tiles,
+                        boardSize: Game2048Constants.boardSize
+                    )
+                    .aspectRatio(1, contentMode: .fit)
+                    .padding()
+                    .gesture(
+                        DragGesture(minimumDistance: 20, coordinateSpace: .local)
+                            .onEnded { value in
+                                let horizontalAmount = value.translation.width
+                                let verticalAmount = value.translation.height
+                                
+                                if abs(horizontalAmount) > abs(verticalAmount) {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        horizontalAmount > 0 ? viewModel.move(.right) : viewModel.move(.left)
+                                    }
+                                } else {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        verticalAmount > 0 ? viewModel.move(.down) : viewModel.move(.up)
                                     }
                                 }
-                        )
-                        
-                        Spacer()
-                    }
+                            }
+                    )
                     
-                case .finished(_):
-                    EmptyView()
+                    Spacer()
                 }
                 
-                // Pause menu
-                if viewModel.showingPauseMenu {
-                    PauseMenuView(
-                        onResume: { viewModel.togglePauseMenu() },
-                        onExit: {
-                            viewModel.cleanup()
-                            navigationManager.navigateToMenu()
-                        }
-                    )
-                }
-                
-                // Game over screen
-                if case .finished(let success) = viewModel.gameState {
-                    GameOverView(
-                        success: success,
-                        onExit: {
-                            viewModel.completeGame()
-                        }
-                    )
-                }
+            case .finished(_):
+                EmptyView()
+            }
+            
+            if viewModel.showingPauseMenu {
+                PauseMenuView(
+                    onResume: { viewModel.togglePauseMenu() },
+                    onExit: {
+                        viewModel.cleanup()
+                        navigationManager.navigateToMenu()
+                    }
+                )
+            }
+            
+            if case .finished(let success) = viewModel.gameState {
+                GameOverView(
+                    success: success,
+                    onExit: { viewModel.completeGame() }
+                )
             }
         }
         .onDisappear {
@@ -117,7 +97,6 @@ struct Game2048HeaderView: View {
                 
                 Text("\(score)")
                     .fontModifier(20)
-                    .animation(.easeInOut, value: score)
             }
         }
     }
@@ -127,16 +106,11 @@ struct Game2048HeaderView: View {
 struct Game2048BoardView: View {
     let tiles: [Tile]
     let boardSize: Int
-    let boardWidth: CGFloat
-    
-    private var cellWidth: CGFloat {
-        (boardWidth - CGFloat(boardSize - 1) * Game2048Constants.tileSpacing) / CGFloat(boardSize)
-    }
-    
+
     var body: some View {
-        ZStack {
-            BoardView(width: boardWidth, height: boardWidth)
-            
+        GeometryReader { geo in
+            let boardWidth = geo.size.width
+            let cellWidth = (boardWidth - CGFloat(boardSize - 1) * Game2048Constants.tileSpacing) / CGFloat(boardSize)
             BoardGridView(
                 tiles: tiles,
                 boardSize: boardSize,
@@ -145,24 +119,22 @@ struct Game2048BoardView: View {
             )
             .padding(Game2048Constants.tileSpacing)
         }
-        .frame(width: boardWidth, height: boardWidth)
     }
 }
 
-// MARK: - Board Grid View (iOS 15 compatible)
+// MARK: - Board Grid View
 struct BoardGridView: View {
     let tiles: [Tile]
     let boardSize: Int
     let cellWidth: CGFloat
     let spacing: CGFloat
-    
+
     var body: some View {
         let positions = (0..<boardSize).flatMap { row in
             (0..<boardSize).map { column in
                 GridPosition(row: row, column: column)
             }
         }
-        
         let columns = Array(
             repeating: GridItem(.fixed(cellWidth), spacing: spacing),
             count: boardSize
@@ -170,17 +142,15 @@ struct BoardGridView: View {
         
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(positions) { position in
-                let tile = tiles.first {
-                    $0.position.row == position.row &&
-                    $0.position.column == position.column
-                }
-                
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.black.opacity(0.2))
                         .frame(width: cellWidth, height: cellWidth)
                     
-                    if let tile = tile {
+                    if let tile = tiles.first(where: {
+                        $0.position.row == position.row &&
+                        $0.position.column == position.column
+                    }) {
                         TileView(tile: tile, width: cellWidth * 0.95)
                             .id(tile.id)
                             .transition(.scale)
