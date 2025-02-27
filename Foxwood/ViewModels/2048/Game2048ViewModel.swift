@@ -35,10 +35,8 @@ final class Game2048ViewModel: ObservableObject {
         self.onGameComplete = onGameComplete
         self.storage = storage
         
-        // Load best score from UserDefaults
         let bestScore = storage.integer(forKey: bestScoreKey)
         
-        // Initialize game with best score
         game = Game2048()
         game.bestScore = bestScore
         
@@ -82,20 +80,17 @@ final class Game2048ViewModel: ObservableObject {
         
         let moved = game.move(direction)
         
-        // Update best score if needed
         if game.score > game.bestScore {
             game.bestScore = game.score
             saveBestScore()
         }
         
-        // Check for game over or win
         if game.isGameOver {
             finishGame(success: false)
         } else if game.hasWon {
             finishGame(success: true)
         }
         
-        // Provide haptic feedback if the move was successful
         if moved {
             HapticManager.shared.play(.light)
         }

@@ -49,18 +49,15 @@ struct Tile: Identifiable, Equatable {
         case 256: return ._256
         case 512: return ._512
         case 1024: return ._1024
-//        case 2048: return ._2048
         default: return ._2048
         }
     }
     
-    // Reset merge state
     mutating func resetMergeState() {
         isNew = false
         isMerged = false
     }
     
-    // Implement Equatable
     static func == (lhs: Tile, rhs: Tile) -> Bool {
         lhs.id == rhs.id &&
         lhs.value == rhs.value &&
@@ -79,10 +76,8 @@ struct Game2048 {
     var isGameOver: Bool = false
     
     init() {
-        // Initialize empty board
         board = Array(repeating: Array(repeating: nil, count: Game2048Constants.boardSize), count: Game2048Constants.boardSize)
         
-        // Add initial tiles
         for _ in 0..<Game2048Constants.initialTileCount {
             addRandomTile()
         }
@@ -90,9 +85,7 @@ struct Game2048 {
     
     // MARK: - Game Logic
     
-    // Add a random tile to the board
     mutating func addRandomTile() {
-        // Get all empty cells
         var emptyCells: [Tile.Position] = []
         for row in 0..<Game2048Constants.boardSize {
             for column in 0..<Game2048Constants.boardSize {
@@ -102,25 +95,19 @@ struct Game2048 {
             }
         }
         
-        // If there are no empty cells, return
         if emptyCells.isEmpty {
             return
         }
         
-        // Choose a random empty cell
         let randomPosition = emptyCells.randomElement()!
         
-        // Create a new tile
         let value = Double.random(in: 0...1) < 0.9 ? 2 : 4
         let newTile = Tile(value: value, position: randomPosition, isNew: true)
         
-        // Place the tile on the board
         board[randomPosition.row][randomPosition.column] = newTile
     }
     
-    // Check if the game is over
     mutating func checkGameOver() {
-        // Check if there are any empty cells
         for row in 0..<Game2048Constants.boardSize {
             for column in 0..<Game2048Constants.boardSize {
                 if board[row][column] == nil {
@@ -129,18 +116,15 @@ struct Game2048 {
             }
         }
         
-        // Check if there are any adjacent cells with the same value
         for row in 0..<Game2048Constants.boardSize {
             for column in 0..<Game2048Constants.boardSize {
                 if let tile = board[row][column] {
-                    // Check right
                     if column < Game2048Constants.boardSize - 1,
                        let rightTile = board[row][column + 1],
                        rightTile.value == tile.value {
                         return
                     }
                     
-                    // Check down
                     if row < Game2048Constants.boardSize - 1,
                        let downTile = board[row + 1][column],
                        downTile.value == tile.value {
@@ -150,13 +134,10 @@ struct Game2048 {
             }
         }
         
-        // If we got here, the game is over
         isGameOver = true
     }
     
-    // Perform a move in the specified direction
     mutating func move(_ direction: MoveDirection) -> Bool {
-        // Reset merge state for all tiles
         for row in 0..<Game2048Constants.boardSize {
             for column in 0..<Game2048Constants.boardSize {
                 if var tile = board[row][column] {
@@ -179,13 +160,11 @@ struct Game2048 {
             moved = moveRight()
         }
         
-        // If the board changed, add a new tile
         if moved {
             addRandomTile()
             movesCount += 1
         }
         
-        // Check if the game is over
         checkGameOver()
         
         return moved
@@ -199,7 +178,6 @@ struct Game2048 {
                 if let tile = board[row][column] {
                     var currentRow = row
                     
-                    // Move the tile up as far as possible
                     while currentRow > 0 && board[currentRow - 1][column] == nil {
                         board[currentRow - 1][column] = Tile(
                             value: tile.value,
@@ -211,13 +189,11 @@ struct Game2048 {
                         moved = true
                     }
                     
-                    // Check if we can merge with the tile above
                     if currentRow > 0,
                        let aboveTile = board[currentRow - 1][column],
                        aboveTile.value == tile.value,
                        !aboveTile.isMerged {
                         
-                        // Merge the tiles
                         let mergedValue = tile.value * 2
                         board[currentRow - 1][column] = Tile(
                             value: mergedValue,
@@ -227,11 +203,9 @@ struct Game2048 {
                         )
                         board[currentRow][column] = nil
                         
-                        // Update score
                         score += mergedValue
                         bestScore = max(score, bestScore)
                         
-                        // Check for win
                         if mergedValue >= Game2048Constants.winValue {
                             hasWon = true
                         }
@@ -253,7 +227,6 @@ struct Game2048 {
                 if let tile = board[row][column] {
                     var currentRow = row
                     
-                    // Move the tile down as far as possible
                     while currentRow < Game2048Constants.boardSize - 1 && board[currentRow + 1][column] == nil {
                         board[currentRow + 1][column] = Tile(
                             value: tile.value,
@@ -265,13 +238,11 @@ struct Game2048 {
                         moved = true
                     }
                     
-                    // Check if we can merge with the tile below
                     if currentRow < Game2048Constants.boardSize - 1,
                        let belowTile = board[currentRow + 1][column],
                        belowTile.value == tile.value,
                        !belowTile.isMerged {
                         
-                        // Merge the tiles
                         let mergedValue = tile.value * 2
                         board[currentRow + 1][column] = Tile(
                             value: mergedValue,
@@ -281,11 +252,9 @@ struct Game2048 {
                         )
                         board[currentRow][column] = nil
                         
-                        // Update score
                         score += mergedValue
                         bestScore = max(score, bestScore)
                         
-                        // Check for win
                         if mergedValue >= Game2048Constants.winValue {
                             hasWon = true
                         }
@@ -307,7 +276,6 @@ struct Game2048 {
                 if let tile = board[row][column] {
                     var currentColumn = column
                     
-                    // Move the tile left as far as possible
                     while currentColumn > 0 && board[row][currentColumn - 1] == nil {
                         board[row][currentColumn - 1] = Tile(
                             value: tile.value,
@@ -319,13 +287,11 @@ struct Game2048 {
                         moved = true
                     }
                     
-                    // Check if we can merge with the tile to the left
                     if currentColumn > 0,
                        let leftTile = board[row][currentColumn - 1],
                        leftTile.value == tile.value,
                        !leftTile.isMerged {
                         
-                        // Merge the tiles
                         let mergedValue = tile.value * 2
                         board[row][currentColumn - 1] = Tile(
                             value: mergedValue,
@@ -335,11 +301,9 @@ struct Game2048 {
                         )
                         board[row][currentColumn] = nil
                         
-                        // Update score
                         score += mergedValue
                         bestScore = max(score, bestScore)
                         
-                        // Check for win
                         if mergedValue >= Game2048Constants.winValue {
                             hasWon = true
                         }
@@ -361,7 +325,6 @@ struct Game2048 {
                 if let tile = board[row][column] {
                     var currentColumn = column
                     
-                    // Move the tile right as far as possible
                     while currentColumn < Game2048Constants.boardSize - 1 && board[row][currentColumn + 1] == nil {
                         board[row][currentColumn + 1] = Tile(
                             value: tile.value,
@@ -373,13 +336,11 @@ struct Game2048 {
                         moved = true
                     }
                     
-                    // Check if we can merge with the tile to the right
                     if currentColumn < Game2048Constants.boardSize - 1,
                        let rightTile = board[row][currentColumn + 1],
                        rightTile.value == tile.value,
                        !rightTile.isMerged {
                         
-                        // Merge the tiles
                         let mergedValue = tile.value * 2
                         board[row][currentColumn + 1] = Tile(
                             value: mergedValue,
@@ -389,11 +350,9 @@ struct Game2048 {
                         )
                         board[row][currentColumn] = nil
                         
-                        // Update score
                         score += mergedValue
                         bestScore = max(score, bestScore)
                         
-                        // Check for win
                         if mergedValue >= Game2048Constants.winValue {
                             hasWon = true
                         }
@@ -407,7 +366,6 @@ struct Game2048 {
         return moved
     }
     
-    // Get all tiles as a flat array
     func getAllTiles() -> [Tile] {
         var tiles: [Tile] = []
         for row in 0..<Game2048Constants.boardSize {
@@ -420,7 +378,6 @@ struct Game2048 {
         return tiles
     }
     
-    // Reset the game
     mutating func resetGame() {
         board = Array(repeating: Array(repeating: nil, count: Game2048Constants.boardSize), count: Game2048Constants.boardSize)
         score = 0
