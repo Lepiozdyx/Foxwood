@@ -4,7 +4,7 @@ import SwiftUI
 enum MemoryGameConstants {
     static let gameDuration: TimeInterval = 90
     static let pairsCount = 12
-    static let countdownDuration: Int = 3
+    static let countdownDuration: Int = 2
     static let animationDuration: TimeInterval = 0.3
 }
 

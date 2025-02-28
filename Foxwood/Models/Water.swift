@@ -6,7 +6,7 @@ enum WaterGameConstants {
     // Game Settings
     static let gameDuration: TimeInterval = 30
     static let requiredDrops: Int = 10
-    static let countdownDuration: Int = 3
+    static let countdownDuration: Int = 2
     
     // Object Sizes
     static let snakeSize: CGFloat = 27

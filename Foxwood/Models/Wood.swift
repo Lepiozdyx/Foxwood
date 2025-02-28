@@ -7,7 +7,7 @@ enum WoodGameConstants {
     static let indicatorSpeed: CGFloat = 1.5
     static let requiredSuccessStreak = 5
     static let maxMisses = 3
-    static let countdownDuration: Int = 3
+    static let countdownDuration: Int = 2
     
     // UI Settings
     static let scaleHeight: CGFloat = 40

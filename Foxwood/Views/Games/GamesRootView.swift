@@ -14,6 +14,10 @@ struct GamesRootView: View {
                         navigationManager.navigateBack()
                     }
                     Spacer()
+                    
+                    MenuActionButton(image: .circleButton) {
+                        navigationManager.navigate(to: .settings)
+                    }
                 }
                 Spacer()
             }

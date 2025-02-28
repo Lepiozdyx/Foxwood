@@ -15,6 +15,7 @@ struct ActionView: View {
                 Text(text)
                     .fontModifier(fontSize)
                     .padding()
+                    .offset(y: -3)
             }
             .playSound()
     }

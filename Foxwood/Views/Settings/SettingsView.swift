@@ -22,7 +22,7 @@ struct SettingsView: View {
             }
             .padding()
             
-            BoardView(width: 450, height: 450)
+            BoardView(width: 350, height: 350)
             
             VStack(spacing: 30) {
                 HStack(spacing: 40) {

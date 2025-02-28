@@ -11,7 +11,7 @@ struct WoodGameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                BackgroundView()
+                BackgroundView(name: .bgMemory)
                 
                 switch viewModel.gameState {
                 case .countdown(let count):
