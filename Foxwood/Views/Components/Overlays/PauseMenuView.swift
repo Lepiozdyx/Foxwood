@@ -35,7 +35,7 @@ struct PauseMenuView: View {
                             onExit()
                         } label: {
                             ActionView(
-                                text: "MENU",
+                                text: "Exit",
                                 fontSize: 28,
                                 width: 250,
                                 height: 70

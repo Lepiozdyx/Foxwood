@@ -42,14 +42,17 @@ struct NavigationRootView: View {
                 MemoryGameView { success in
                     navigationManager.navigateBack()
                 }
+                .environmentObject(navigationManager)
             case .game2048:
                 Game2048View { success in
                     navigationManager.navigateBack()
                 }
+                .environmentObject(navigationManager)
             case .ticTacToeGame:
                 TicTacToeView { success in
                     navigationManager.navigateBack()
                 }
+                .environmentObject(navigationManager)
             case .achievements:
                 AchievementsView()
                     .environmentObject(navigationManager)
@@ -69,5 +72,6 @@ struct NavigationRootView: View {
 }
 
 #Preview {
-    ContentView()
+    NavigationRootView()
+        .environmentObject(NavigationManager())
 }
