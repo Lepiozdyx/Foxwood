@@ -75,8 +75,8 @@ struct FoodGamePlayView: View {
                 onTapItem: { viewModel.tapItem($0) }
             )
             
-            if viewModel.isPenalty {
-                PenaltyOverlayView()
+            if viewModel.isMissTap {
+                MissTapOverlayView()
             }
         }
     }
@@ -126,23 +126,12 @@ struct FallingFoodItemView: View {
 }
 
 // MARK: - Penalty View
-struct PenaltyOverlayView: View {
+struct MissTapOverlayView: View {
     var body: some View {
-        ZStack {
-            Color.red.opacity(0.3)
-                .ignoresSafeArea()
-                .transition(.opacity)
-                .allowsHitTesting(false)
-            
-            Text("You've been poisoned, wait five seconds")
-                .fontModifier(26)
-                .transition(.scale)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .foregroundStyle(.ultraThinMaterial)
-                )
-        }
+        Color.red.opacity(0.2)
+            .ignoresSafeArea()
+            .transition(.opacity)
+            .allowsHitTesting(false)
     }
 }
 

@@ -8,16 +8,15 @@ final class FoodGameViewModel: ObservableObject {
     @Published private(set) var items: [FoodItem] = []
     @Published private(set) var gameState: FoodGameState = .countdown(3)
     @Published private(set) var timeRemaining: TimeInterval = FoodGameConstants.gameDuration
-    @Published private(set) var isPenalty = false
+    @Published private(set) var isMissTap = false
     @Published private(set) var collectedFood = 0
     
     // MARK: Private Properties
     private var countdownTimer: AnyCancellable?
     private var gameTimer: AnyCancellable?
-    private var penaltyTimer: AnyCancellable?
+    private var missTapTimer: AnyCancellable?
     private var itemGenerationTimer: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
-    
     private var screenSize: CGSize = .zero
     private var safeAreaInsets: EdgeInsets = .init()
     private var onGameComplete: ((Bool) -> Void)?
@@ -59,7 +58,7 @@ final class FoodGameViewModel: ObservableObject {
     
     private func startGame() {
         gameState = .playing
-        HapticManager.shared.play(.medium)  // Средняя вибрация при старте игры
+        HapticManager.shared.play(.medium)
         startGameTimer()
         startGeneratingItems()
     }
@@ -105,15 +104,19 @@ final class FoodGameViewModel: ObservableObject {
     
     func tapItem(_ item: FoodItem) {
         guard case .playing = gameState,
-              !isPenalty,
+              !isMissTap,
               item.isEnabled else { return }
         
         if item.type.isEdible {
             collectedFood += 1
             HapticManager.shared.play(.light)
         } else {
-            activatePenalty()
+            activateWarning()
             HapticManager.shared.play(.error)
+            
+            if collectedFood > 0 {
+                collectedFood -= 1
+            }
         }
         
         if let index = items.firstIndex(where: { $0.id == item.id }) {
@@ -121,24 +124,24 @@ final class FoodGameViewModel: ObservableObject {
         }
     }
     
-    private func activatePenalty() {
-        isPenalty = true
-        penaltyTimer = Timer.publish(every: FoodGameConstants.penaltyDuration, on: .main, in: .common)
+    private func activateWarning() {
+        isMissTap = true
+        
+        missTapTimer = Timer.publish(every: FoodGameConstants.missTapWarningDuration, on: .main, in: .common)
             .autoconnect()
             .first()
             .sink { [weak self] _ in
-                self?.isPenalty = false
+                self?.isMissTap = false
             }
     }
     
     private func finishGame() {
         stopTimers()
         let success = collectedFood >= FoodGameConstants.requiredFoodCount
-        HapticManager.shared.play(success ? .success : .error)  // Успех/неудача в конце игры
+        HapticManager.shared.play(success ? .success : .error)
         gameState = .finished(success: success)
     }
     
-    // Добавляем новый метод для явного завершения игры
     func completeGame() {
         guard case .finished(let success) = gameState else { return }
         onGameComplete?(success)
@@ -147,12 +150,12 @@ final class FoodGameViewModel: ObservableObject {
     private func stopTimers() {
         gameTimer?.cancel()
         itemGenerationTimer?.cancel()
-        penaltyTimer?.cancel()
+        missTapTimer?.cancel()
         countdownTimer?.cancel()
         
         gameTimer = nil
         itemGenerationTimer = nil
-        penaltyTimer = nil
+        missTapTimer = nil
         countdownTimer = nil
     }
     
