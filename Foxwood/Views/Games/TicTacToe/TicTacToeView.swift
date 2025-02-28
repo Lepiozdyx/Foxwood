@@ -11,7 +11,7 @@ struct TicTacToeView: View {
     
     var body: some View {
         ZStack {
-            BackgroundView()
+            BackgroundView(name: .bgTTT)
             
             switch viewModel.gameState {
             case .playing, .paused, .initial:
@@ -154,7 +154,7 @@ struct TicTacToeCellView: View {
         Button(action: onTap) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(.black.opacity(0.3))
+                    .fill(.black.opacity(0.6))
                     .frame(width: width, height: width)
                 
                 if let player = cell.player {

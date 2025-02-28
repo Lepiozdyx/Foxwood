@@ -15,7 +15,7 @@ struct FoodGameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                BackgroundView()
+                BackgroundView(name: .bgWater)
                 
                 switch viewModel.gameState {
                 case .countdown(let count):

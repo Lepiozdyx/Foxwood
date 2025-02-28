@@ -11,7 +11,7 @@ struct BoardGameView: View {
             let height = geo.size.height
             
             ZStack {
-                BackgroundView()
+                BackgroundView(name: .bgClassic)
                 
                 // MARK: Game field
                 VStack {

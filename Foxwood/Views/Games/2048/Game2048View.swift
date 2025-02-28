@@ -11,7 +11,7 @@ struct Game2048View: View {
     
     var body: some View {
         ZStack {
-            BackgroundView()
+            BackgroundView(name: .bg2048)
             
             switch viewModel.gameState {
             case .playing, .paused, .initial:
@@ -143,7 +143,7 @@ struct BoardGridView: View {
             ForEach(positions) { position in
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(.black.opacity(0.2))
+                        .fill(.black.opacity(0.6))
                         .frame(width: cellWidth, height: cellWidth)
                     
                     if let tile = tiles.first(where: {

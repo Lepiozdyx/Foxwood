@@ -11,7 +11,7 @@ struct WaterGameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                BackgroundView()
+                BackgroundView(name: .bgFood)
                 
                 // Game Content
                 switch viewModel.gameState {
