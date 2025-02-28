@@ -17,6 +17,9 @@ struct NavigationRootView: View {
             case .menu:
                 MenuView()
                     .environmentObject(navigationManager)
+            case .gamesRoot:
+                GamesRootView()
+                    .environmentObject(navigationManager)
             case .boardGame:
                 BoardGameView(viewModel: boardGameViewModel)
                     .environmentObject(navigationManager)
@@ -30,9 +33,21 @@ struct NavigationRootView: View {
                     boardGameViewModel.handleResourceGameCompletion(success: success)
                     navigationManager.navigateBack()
                 }
-            case .foodGame:
+            case .foodGame(let viewModel):
                 FoodGameView { success in
-                    boardGameViewModel.handleResourceGameCompletion(success: success)
+                    viewModel.handleResourceGameCompletion(success: success)
+                    navigationManager.navigateBack()
+                }
+            case .memoryGame:
+                MemoryGameView { success in
+                    navigationManager.navigateBack()
+                }
+            case .game2048:
+                Game2048View { success in
+                    navigationManager.navigateBack()
+                }
+            case .ticTacToeGame:
+                TicTacToeView { success in
                     navigationManager.navigateBack()
                 }
             case .achievements:

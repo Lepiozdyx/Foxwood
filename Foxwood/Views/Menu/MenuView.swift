@@ -12,9 +12,9 @@ struct MenuView: View {
                 HStack(spacing: 20) {
                     //BoardGameView
                     Button {
-                        navigationManager.navigate(to: .boardGame)
+                        navigationManager.navigate(to: .gamesRoot)
                     } label: {
-                        ActionView(text: "Play", fontSize: 20, width: 300, height: 100)
+                        ActionView(text: "Games", fontSize: 20, width: 300, height: 100)
                     }
                     
                     //AchievementsView
