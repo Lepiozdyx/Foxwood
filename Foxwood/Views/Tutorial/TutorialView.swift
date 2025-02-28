@@ -84,13 +84,7 @@ struct TutorialView: View {
         case .resources:
             resourcesView
         case .tutorialEnd:
-            VStack(spacing: 40) {
-                Text("Good luck and have fun!")
-                    .fontModifier(24)
-                Image(.logo)
-                    .resizable()
-                    .frame(width: 110, height: 120)
-            }
+            tutorialEndView
         }
     }
     
@@ -228,6 +222,7 @@ struct TutorialView: View {
                 VStack {
                     Text("- The game of getting food. \nYou need to catch resources by using taps. Time limit 30 seconds.")
                         .fontModifier(18)
+                        .frame(maxHeight: 200)
                     
                     HStack {
                         Image(.mushroomButton)
@@ -258,7 +253,6 @@ struct TutorialView: View {
                             .shadow(color: .black, radius: 2, x: -3, y: 3)
                     }
                 }
-                .frame(height: 250, alignment: .top)
                 
                 customDivider
                 
@@ -284,12 +278,11 @@ struct TutorialView: View {
                             }
                     }
                 }
-                .frame(height: 250, alignment: .top)
                 
                 customDivider
                 
                 VStack {
-                    Text("- The game of getting wood. \nYour task is to make a series of five accurate hits in time by pressing the button. Watch the indicator, it must be in the “green” zone. There are three chances to miss! No time limits.")
+                    Text("- The game of getting wood. \nYour task is to make a series of five accurate hits in time by pressing the button.")
                         .fontModifier(18)
                     
                     HStack(spacing: 20) {
@@ -302,11 +295,38 @@ struct TutorialView: View {
                             .frame(width: 35, height: 35)
                     }
                 }
-                .frame(height: 300, alignment: .top)
             }
         }
     }
     
+    // MARK: - tutorialEndView
+    private var tutorialEndView: some View {
+        VStack(spacing: 30) {
+            Text("You will also have an unforgettable experience with our other mini-games")
+                .fontModifier(24)
+                .frame(maxHeight: 150)
+            
+            HStack {
+                Image(.memory)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80)
+                
+                Image(._2048Button)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80)
+                
+                Image(.ttt)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80)
+            }
+            customDivider
+            Text("Good luck and have fun!")
+                .fontModifier(24)
+        }
+    }
     // MARK: - customDivider
     private var customDivider: some View {
         Rectangle()
