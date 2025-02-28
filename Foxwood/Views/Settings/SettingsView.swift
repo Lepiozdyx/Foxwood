@@ -26,9 +26,9 @@ struct SettingsView: View {
             
             VStack(spacing: 30) {
                 HStack(spacing: 40) {
-                    Image(.greenUnderlay)
+                    Image(.hexagon)
                         .resizable()
-                        .frame(width: 160, height: 50)
+                        .frame(width: 160, height: 55)
                         .overlay {
                             Text("Effects")
                                 .fontModifier(24)
@@ -40,9 +40,9 @@ struct SettingsView: View {
                 }
                 
                 HStack(spacing: 40) {
-                    Image(.greenUnderlay)
+                    Image(.hexagon)
                         .resizable()
-                        .frame(width: 160, height: 50)
+                        .frame(width: 160, height: 55)
                         .overlay {
                             Text("Music")
                                 .fontModifier(24)
@@ -73,14 +73,9 @@ struct SwitchButtonView: View {
         } label: {
             Image(.circleButton)
                 .resizable()
+                .colorMultiply(isOn ? .white : .brown)
                 .frame(width: 80, height: 80)
                 .opacity(isOn ? 1 : 0.8)
-                .overlay {
-                    Image(systemName: isOn ? "checkmark" : "xmark")
-                        .foregroundStyle(isOn ? . white : .red.opacity(0.7))
-                        .font(.system(size: 30))
-                        .shadow(color: .black, radius: 2, x: 2, y: -1)
-                }
         }
         .buttonStyle(.plain)
     }

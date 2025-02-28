@@ -35,6 +35,7 @@ struct TutorialView: View {
                             boardSize: CGSize(width: width / 1.3, height: height / 1.5)
                         ) {
                             contentView
+                                .padding(.bottom, 30)
                         }
                     }
                 }
@@ -102,7 +103,7 @@ struct TutorialView: View {
             customDivider
             
             VStack(spacing: 20) {
-                Text("Your goal is to gather resources to survive the night.")
+                Text("In 'Classic game' your goal is to gather resources to survive the night.")
                     .fontModifier(18)
                 
                 HStack(spacing: 20) {
