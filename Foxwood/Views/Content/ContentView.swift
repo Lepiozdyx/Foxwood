@@ -15,6 +15,9 @@ struct ContentView: View {
                 } else {
                     InitialWebView(url: NetworkManager.initial, networkManager: viewModel.networkManager)
                 }
+            case .onboarding:
+                OnboardingView(isOnboardingCompleted: $viewModel.isOnboardingCompleted)
+                    .transition(.opacity)
             case .navigationRoot:
                 NavigationRootView()
                     .transition(.opacity)
@@ -22,6 +25,13 @@ struct ContentView: View {
         }
         .onAppear {
             viewModel.onAppear()
+        }
+        .onChange(of: viewModel.isOnboardingCompleted) { completed in
+            if completed {
+                withAnimation {
+                    viewModel.completeOnboarding()
+                }
+            }
         }
     }
 }
