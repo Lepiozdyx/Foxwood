@@ -16,7 +16,7 @@ struct MemoryCardView: View {
         } label: {
             ZStack {
                 // Card back (when face down)
-                Image(.greenCube)
+                Image(.greenQ)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 

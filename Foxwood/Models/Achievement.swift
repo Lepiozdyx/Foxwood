@@ -9,10 +9,10 @@ enum AchievementType: String, CaseIterable, Codable {
     
     var image: ImageResource {
         switch self {
-        case .food: return .foodAchievement
-        case .water: return .waterAchievement
-        case .wood: return .woodAchievement
-        case .nights: return .nightAchievement
+        case .food: return .foodAch
+        case .water: return .waterAch
+        case .wood: return .woodAch
+        case .nights: return .nightAch
         }
     }
     

@@ -11,7 +11,7 @@ struct WaterGameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                BackgroundView(name: .bgFood)
+                BackgroundView(name: .backgrFood)
                 
                 // Game Content
                 switch viewModel.gameState {
@@ -132,7 +132,7 @@ struct WaterDropView: View {
     let drop: WaterDrop
     
     var body: some View {
-        Image(.waterdrop)
+        Image(.waterdr)
             .resizable()
             .shadow(color: .white.opacity(0.6), radius: 2, x: 0, y: 1)
             .frame(width: WaterGameConstants.dropSize, height: WaterGameConstants.dropSize * 1.3)

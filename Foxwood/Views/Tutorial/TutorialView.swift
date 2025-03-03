@@ -15,7 +15,7 @@ struct TutorialView: View {
                 
                 VStack {
                     HStack {
-                        MenuActionButton(image: .backButton) {
+                        MenuActionButton(image: .returnButton) {
                             navigationManager.navigateBack()
                         }
                         Spacer()
@@ -102,9 +102,9 @@ struct TutorialView: View {
                 
                 HStack(spacing: 20) {
                     Image(.wood)
-                    Image(.waterdrop)
-                    Image(.mushroom)
-                    Image(.berries)
+                    Image(.waterdr)
+                    Image(.mushrm)
+                    Image(.berr)
                 }
                 
                 customDivider
@@ -112,7 +112,7 @@ struct TutorialView: View {
                 Text("You have only 10 moves before nightfall. Get your resources together. Good luck!")
                     .fontModifier(18)
                 
-                Image(.greenUnderlay)
+                Image(.greenUnd)
                     .resizable()
                     .frame(width: 160, height: 120)
                     .overlay {
@@ -182,10 +182,10 @@ struct TutorialView: View {
                     .fontModifier(18)
                 
                 HStack(spacing: 10) {
-                    Image(.woodCube)
-                    Image(.waterCube)
-                    Image(.mushroomCube)
-                    Image(.berriesCube)
+                    Image(.woodQ)
+                    Image(.waterQ)
+                    Image(.mushroomQ)
+                    Image(.berriesQ)
                 }
                 
                 customDivider
@@ -193,14 +193,14 @@ struct TutorialView: View {
                 Text("Empty game cell - does not spend moves. You may continue to make your next move")
                     .fontModifier(18)
                 
-                Image(.emptyCube)
+                Image(.emptyQ)
                 
                 customDivider
                 
                 Text("game cell with a spider web is a trap, opening such a cell you lose 1 move")
                     .fontModifier(18)
                 
-                Image(.webCube)
+                Image(.spiderQ)
             }
         }
     }
@@ -241,10 +241,10 @@ struct TutorialView: View {
                         Image(.poisonMushroomButton)
                             .resizable()
                             .frame(width: 50, height: 50)
-                        Image(.bacteriaButton)
+                        Image(.bactButton)
                             .resizable()
                             .frame(width: 50, height: 50)
-                        Image(.bacteria2Button)
+                        Image(.bact2Button)
                             .resizable()
                             .frame(width: 50, height: 50)
                         Image(systemName: "xmark")
@@ -261,7 +261,7 @@ struct TutorialView: View {
                         .fontModifier(18)
                     
                     HStack(spacing: 20) {
-                        Image(.waterdrop)
+                        Image(.waterdr)
                             .resizable()
                             .frame(width: 30, height: 40)
                         

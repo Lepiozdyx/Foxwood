@@ -8,7 +8,7 @@ struct LoadingView: View {
         VStack {
             Spacer()
             
-            Image(.logo)
+            Image(.logotype)
                 .resizable()
                 .frame(width: 150, height: 150)
                 .scaleEffect(isAnimating ? 1.1 : 0.99)

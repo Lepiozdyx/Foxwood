@@ -11,7 +11,7 @@ struct TicTacToeView: View {
     
     var body: some View {
         ZStack {
-            BackgroundView(name: .bgTTT)
+            BackgroundView(name: .backgrTTT)
             
             switch viewModel.gameState {
             case .playing, .paused, .initial:

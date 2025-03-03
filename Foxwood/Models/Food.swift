@@ -26,8 +26,8 @@ enum FoodItemType {
         case .mushroom: return .mushroomButton
         case .berries: return .berriesButton
         case .poisonMushroom: return .poisonMushroomButton
-        case .bacteria: return .bacteriaButton
-        case .bacteria2: return .bacteria2Button
+        case .bacteria: return .bactButton
+        case .bacteria2: return .bact2Button
         }
     }
     

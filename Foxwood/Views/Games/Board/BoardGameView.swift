@@ -11,7 +11,7 @@ struct BoardGameView: View {
             let height = geo.size.height
             
             ZStack {
-                BackgroundView(name: .bgClassic)
+                BackgroundView(name: .backgrClassic)
                 
                 // MARK: Game field
                 VStack {
@@ -156,7 +156,7 @@ struct ResourceCounterView: View {
     let foodCount: Int
     
     var body: some View {
-        Image(.greenUnderlay)
+        Image(.greenUnd)
             .resizable()
             .frame(width: 130, height: 110)
             .shadow(color: .black, radius: 4, x: -2, y: 2)

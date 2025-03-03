@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct BackgroundView: View {
-    var name: ImageResource = .bg
+    var name: ImageResource = .backgr
     
     var body: some View {
         Image(name)

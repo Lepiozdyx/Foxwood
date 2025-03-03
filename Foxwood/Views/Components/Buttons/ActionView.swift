@@ -8,7 +8,7 @@ struct ActionView: View {
     let height: CGFloat
     
     var body: some View {
-        Image(.actionButton)
+        Image(.mainActionButton)
             .resizable()
             .frame(maxWidth: width, maxHeight: height)
             .overlay {

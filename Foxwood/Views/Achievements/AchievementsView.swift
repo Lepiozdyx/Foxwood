@@ -15,7 +15,7 @@ struct AchievementsView: View {
                 
                 VStack {
                     HStack {
-                        MenuActionButton(image: .backButton) {
+                        MenuActionButton(image: .returnButton) {
                             navigationManager.navigateBack()
                         }
                         Spacer()
@@ -72,7 +72,7 @@ struct AchievementItemView: View {
                 .opacity(style.opacity)
                 .colorMultiply(style.color)
             
-            Image(.greenUnderlay)
+            Image(.greenUnd)
                 .resizable()
                 .frame(width: 130, height: 55)
                 .overlay {

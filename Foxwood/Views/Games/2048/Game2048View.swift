@@ -11,7 +11,7 @@ struct Game2048View: View {
     
     var body: some View {
         ZStack {
-            BackgroundView(name: .bg2048)
+            BackgroundView(name: .backgr2048)
             
             switch viewModel.gameState {
             case .playing, .paused, .initial:

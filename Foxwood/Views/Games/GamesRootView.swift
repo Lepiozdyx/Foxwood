@@ -10,7 +10,7 @@ struct GamesRootView: View {
             
             VStack {
                 HStack {
-                    MenuActionButton(image: .backButton) {
+                    MenuActionButton(image: .returnButton) {
                         navigationManager.navigateBack()
                     }
                     Spacer()

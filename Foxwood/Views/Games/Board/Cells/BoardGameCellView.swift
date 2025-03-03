@@ -21,40 +21,40 @@ struct BoardGameCellView: View {
                 if cell.isRevealed {
                     switch cell.type {
                     case .empty:
-                        Image(.emptyCube)
+                        Image(.emptyQ)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                     case .web:
-                        Image(.webCube)
+                        Image(.spiderQ)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                     case .wood:
-                        Image(.woodCube)
+                        Image(.woodQ)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .opacity(cell.isCompleted ? 0.5 : 1.0)
                             .scaleEffect(scale)
                     case .water:
-                        Image(.waterCube)
+                        Image(.waterQ)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .opacity(cell.isCompleted ? 0.5 : 1.0)
                             .scaleEffect(scale)
                     case .mushroom:
-                        Image(.mushroomCube)
+                        Image(.mushroomQ)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .opacity(cell.isCompleted ? 0.5 : 1.0)
                             .scaleEffect(scale)
                     case .berries:
-                        Image(.berriesCube)
+                        Image(.berriesQ)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .opacity(cell.isCompleted ? 0.5 : 1.0)
                             .scaleEffect(scale)
                     }
                 } else {
-                    Image(.greenCube)
+                    Image(.greenQ)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 }
